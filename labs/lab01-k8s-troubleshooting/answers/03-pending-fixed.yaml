@@ -1,0 +1,23 @@
+# ANSWER: 小さな検証用 request/limit へ修正。クラスタの LimitRange/Quota は要確認。
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pending-fixed
+  namespace: os-readiness-lab
+  labels:
+    training-case: pending
+    training-result: fixed
+spec:
+  automountServiceAccountToken: false
+  containers:
+    - name: app
+      image: alpine:3.20
+      command: ["/bin/sh", "-c"]
+      args: ["sleep 3600"]
+      resources:
+        requests:
+          cpu: 5m
+          memory: 8Mi
+        limits:
+          cpu: 20m
+          memory: 32Mi

@@ -1,0 +1,195 @@
+apiVersion: v1beta1
+kind: AgentConfig
+metadata:
+  name: ocp-prd
+rendezvousIP: 192.0.2.21
+hosts:
+  - hostname: cp01.ocp-prd.example.com
+    role: master
+    interfaces:
+      - name: enp1s0
+        macAddress: 02:00:00:00:00:21
+    rootDeviceHints:
+      deviceName: /dev/sda
+    networkConfig:
+      interfaces:
+        - name: enp1s0
+          type: ethernet
+          state: up
+          mac-address: 02:00:00:00:00:21
+          mtu: 1500
+          ipv4:
+            enabled: true
+            address:
+              - ip: 192.0.2.21
+                prefix-length: 24
+            dhcp: false
+          ipv6:
+            enabled: false
+      dns-resolver:
+        config:
+          server:
+            - 192.0.2.2
+            - 192.0.2.3
+      routes:
+        config:
+          - destination: 0.0.0.0/0
+            next-hop-address: 192.0.2.1
+            next-hop-interface: enp1s0
+            table-id: 254
+  - hostname: cp02.ocp-prd.example.com
+    role: master
+    interfaces:
+      - name: enp1s0
+        macAddress: 02:00:00:00:00:22
+    rootDeviceHints:
+      deviceName: /dev/sda
+    networkConfig:
+      interfaces:
+        - name: enp1s0
+          type: ethernet
+          state: up
+          mac-address: 02:00:00:00:00:22
+          mtu: 1500
+          ipv4:
+            enabled: true
+            address:
+              - ip: 192.0.2.22
+                prefix-length: 24
+            dhcp: false
+          ipv6:
+            enabled: false
+      dns-resolver:
+        config:
+          server: [192.0.2.2, 192.0.2.3]
+      routes:
+        config:
+          - destination: 0.0.0.0/0
+            next-hop-address: 192.0.2.1
+            next-hop-interface: enp1s0
+            table-id: 254
+  - hostname: cp03.ocp-prd.example.com
+    role: master
+    interfaces:
+      - name: enp1s0
+        macAddress: 02:00:00:00:00:23
+    rootDeviceHints:
+      deviceName: /dev/sda
+    networkConfig:
+      interfaces:
+        - name: enp1s0
+          type: ethernet
+          state: up
+          mac-address: 02:00:00:00:00:23
+          mtu: 1500
+          ipv4:
+            enabled: true
+            address:
+              - ip: 192.0.2.23
+                prefix-length: 24
+            dhcp: false
+          ipv6:
+            enabled: false
+      dns-resolver:
+        config:
+          server: [192.0.2.2, 192.0.2.3]
+      routes:
+        config:
+          - destination: 0.0.0.0/0
+            next-hop-address: 192.0.2.1
+            next-hop-interface: enp1s0
+            table-id: 254
+  - hostname: wk01.ocp-prd.example.com
+    role: worker
+    interfaces:
+      - name: enp1s0
+        macAddress: 02:00:00:00:00:31
+    rootDeviceHints:
+      deviceName: /dev/sda
+    networkConfig:
+      interfaces:
+        - name: enp1s0
+          type: ethernet
+          state: up
+          mac-address: 02:00:00:00:00:31
+          mtu: 1500
+          ipv4:
+            enabled: true
+            address:
+              - ip: 192.0.2.31
+                prefix-length: 24
+            dhcp: false
+          ipv6:
+            enabled: false
+      dns-resolver:
+        config:
+          server: [192.0.2.2, 192.0.2.3]
+      routes:
+        config:
+          - destination: 0.0.0.0/0
+            next-hop-address: 192.0.2.1
+            next-hop-interface: enp1s0
+            table-id: 254
+  - hostname: wk02.ocp-prd.example.com
+    role: worker
+    interfaces:
+      - name: enp1s0
+        macAddress: 02:00:00:00:00:32
+    rootDeviceHints:
+      deviceName: /dev/sda
+    networkConfig:
+      interfaces:
+        - name: enp1s0
+          type: ethernet
+          state: up
+          mac-address: 02:00:00:00:00:32
+          mtu: 1500
+          ipv4:
+            enabled: true
+            address:
+              - ip: 192.0.2.32
+                prefix-length: 24
+            dhcp: false
+          ipv6:
+            enabled: false
+      dns-resolver:
+        config:
+          server: [192.0.2.2, 192.0.2.3]
+      routes:
+        config:
+          - destination: 0.0.0.0/0
+            next-hop-address: 192.0.2.1
+            next-hop-interface: enp1s0
+            table-id: 254
+  - hostname: wk03.ocp-prd.example.com
+    role: worker
+    interfaces:
+      - name: enp1s0
+        macAddress: 02:00:00:00:00:33
+    rootDeviceHints:
+      deviceName: /dev/sda
+    networkConfig:
+      interfaces:
+        - name: enp1s0
+          type: ethernet
+          state: up
+          mac-address: 02:00:00:00:00:33
+          mtu: 1500
+          ipv4:
+            enabled: true
+            address:
+              - ip: 192.0.2.33
+                prefix-length: 24
+            dhcp: false
+          ipv6:
+            enabled: false
+      dns-resolver:
+        config:
+          server: [192.0.2.2, 192.0.2.3]
+      routes:
+        config:
+          - destination: 0.0.0.0/0
+            next-hop-address: 192.0.2.1
+            next-hop-interface: enp1s0
+            table-id: 254
+

@@ -1,0 +1,81 @@
+flowchart TB
+    classDef external fill:#eef4ff,stroke:#4b6b9a,color:#172b4d
+    classDef control fill:#fff3cd,stroke:#946200,color:#3d2b00
+    classDef worker fill:#e8f5e9,stroke:#39733c,color:#163a18
+    classDef future fill:#f4ecff,stroke:#7351a6,color:#33204d,stroke-dasharray: 5 5
+    classDef tbd fill:#f8f9fa,stroke:#6c757d,color:#343a40,stroke-dasharray: 3 3
+
+    subgraph PEOPLE["利用者・運用者"]
+        ADMIN["管理者 / CI"]
+        USER["社内Web/API利用者"]
+    end
+
+    DNS["外部冗長DNS<br/>192.0.2.2 / 192.0.2.3"]:::external
+    APILB["API VIP / L4 LB<br/>192.0.2.10<br/>TCP 6443 / 22623"]:::external
+    INGLB["Ingress VIP / L4 LB<br/>192.0.2.11<br/>TCP 80 / 443"]:::external
+    LBPAIR["LB node pair<br/>192.0.2.12 / 192.0.2.13"]:::tbd
+
+    subgraph OCP["OpenShift Container Platform 4.22.z 暫定 / ocp-prd"]
+        subgraph CP["Control Plane / RHCOS"]
+            CP1["cp01<br/>192.0.2.21"]:::control
+            CP2["cp02<br/>192.0.2.22"]:::control
+            CP3["cp03<br/>192.0.2.23"]:::control
+        end
+        subgraph WK["Worker / RHCOS"]
+            WK1["wk01<br/>192.0.2.31"]:::worker
+            WK2["wk02<br/>192.0.2.32"]:::worker
+            WK3["wk03<br/>192.0.2.33"]:::worker
+            PLATFORM["Ingress / Monitoring / Logging"]:::worker
+            APP["Web / API workloads"]:::worker
+            VIRT["Phase 2: Virtualization / MTV PoC<br/>代表VM 3台"]:::future
+        end
+    end
+
+    NTP["外部冗長NTP<br/>192.0.2.4 / 192.0.2.5"]:::external
+    PROXY["組織Proxy<br/>proxy.example.com:3128"]:::external
+    IDP["組織IdP / MFA<br/>方式TBD"]:::tbd
+    CSI["外部CSI Storage<br/>製品 / StorageClass TBD"]:::tbd
+    BACKUP["Backup object storage<br/>192.0.2.15"]:::external
+    KONG["Kong連携点<br/>版 / 方式TBD"]:::future
+    SYSDIG["Sysdig連携点<br/>版 / 方式TBD"]:::future
+
+    ADMIN --> DNS
+    USER --> DNS
+    DNS --> APILB
+    DNS --> INGLB
+    LBPAIR -. "VIP冗長化方式TBD" .-> APILB
+    LBPAIR -. "VIP冗長化方式TBD" .-> INGLB
+    ADMIN -->|"API"| APILB
+    USER -->|"Route"| INGLB
+    APILB --> CP1
+    APILB --> CP2
+    APILB --> CP3
+    INGLB --> WK1
+    INGLB --> WK2
+    INGLB --> WK3
+    CP1 <--> CP2
+    CP2 <--> CP3
+    CP1 <--> CP3
+    CP1 <--> WK1
+    CP2 <--> WK2
+    CP3 <--> WK3
+    PLATFORM --- APP
+    VIRT -. "Phase 2" .-> WK1
+    VIRT -. "Phase 2" .-> WK2
+    VIRT -. "Phase 2" .-> WK3
+    NTP --> CP1
+    NTP --> CP2
+    NTP --> CP3
+    NTP --> WK1
+    NTP --> WK2
+    NTP --> WK3
+    CP1 --> PROXY
+    WK1 --> PROXY
+    CP2 <--> IDP
+    WK1 <--> CSI
+    WK2 <--> CSI
+    WK3 <--> CSI
+    CP3 -. "etcd backup" .-> BACKUP
+    PLATFORM -. "OADP / PV backup" .-> BACKUP
+    KONG -. "API Gateway integration" .-> INGLB
+    SYSDIG -. "monitoring / runtime security" .-> PLATFORM

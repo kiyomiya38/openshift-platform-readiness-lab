@@ -1,0 +1,29 @@
+flowchart LR
+    A["対象 VM 棚卸し\nOS / CPU / RAM / Disk / Network / 依存先"]
+    B{"MTV と移行先の\n互換性確認"}
+    C["対象外または代替方式を検討\n要確認"]
+    D["PoC 対象選定\n低リスクかつ代表的"]
+    E["移行先設計\nNamespace / Storage / Multus / IP / Backup"]
+    F["Provider / Plan 作成\nSecret 実値は安全な保管先"]
+    G["リハーサル\n変換・起動・疎通・性能・復旧"]
+    H{"合格条件を満たすか"}
+    I["課題修正と再試験"]
+    J{"Go / No-Go\n承認ゲート"}
+    K["変更凍結・最終 Backup\n書込み停止"]
+    L["Cold / Warm Migration 実行\n方式は要確認"]
+    M["切替\nDNS / LB / IP"]
+    N["移行後試験\nOS / Agent / Data / App / Monitoring"]
+    O{"成功条件を満たすか"}
+    P["移行元を隔離保持\n安定監視後に完了"]
+    R["ロールバック判断\n移行元再開 / DNS 復旧 / データ整合"]
+
+    A --> B
+    B -->|"No"| C
+    B -->|"Yes"| D
+    D --> E --> F --> G --> H
+    H -->|"No"| I --> G
+    H -->|"Yes"| J
+    J -->|"No-Go"| I
+    J -->|"Go"| K --> L --> M --> N --> O
+    O -->|"Yes"| P
+    O -->|"No / 期限内"| R

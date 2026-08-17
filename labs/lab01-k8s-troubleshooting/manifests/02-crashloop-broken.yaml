@@ -1,0 +1,22 @@
+# BROKEN BY DESIGN: command が exit 42 で終了するため再起動を繰り返します。
+apiVersion: v1
+kind: Pod
+metadata:
+  name: crashloop-broken
+  namespace: os-readiness-lab
+  labels:
+    training-case: crashloop
+spec:
+  automountServiceAccountToken: false
+  containers:
+    - name: app
+      image: alpine:3.20
+      command: ["/bin/sh", "-c"]
+      args: ["echo 'TRAINING: intentional exit'; exit 42"]
+      resources:
+        requests:
+          cpu: 5m
+          memory: 8Mi
+        limits:
+          cpu: 20m
+          memory: 32Mi

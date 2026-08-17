@@ -1,0 +1,43 @@
+flowchart TB
+    GOV["変更責任者 / 案件責任者\nGo / No-Go・リスク受容"]
+
+    subgraph TEAMS["実行・運用チーム"]
+        PT["Platform team\nOCP・Operator・VM API"]
+        NT["Network / Infrastructure team\nDNS・LB・Firewall・NTP"]
+        HT["Hardware team\nBare metal・BMC・Firmware"]
+        ST["Storage team\nCSI・容量・Snapshot"]
+        SE["Security team\nIdP・RBAC・証明書・監査"]
+        AT["Application team\nアプリ・DB整合性・業務受入"]
+        PO["Product owner\nKong・Sysdig契約と方式"]
+    end
+
+    GOV --> PT
+    GOV --> NT
+    GOV --> HT
+    GOV --> ST
+    GOV --> SE
+    GOV --> AT
+    GOV --> PO
+
+    PT --> OCP["OpenShift platform"]
+    NT --> OCP
+    HT --> OCP
+    ST --> OCP
+    SE --> OCP
+
+    OCP --> APP["Container workload"]
+    OCP --> VM["OpenShift Virtualization / VM"]
+    AT --> APP
+    AT --> VM
+
+    PO --> KONG["Kong integration\n設計のみ"]
+    PO --> SYSDIG["Sysdig integration\n設計のみ"]
+    PT --> KONG
+    PT --> SYSDIG
+    SE --> KONG
+    SE --> SYSDIG
+
+    APP --> ACCEPT["業務受入"]
+    VM --> ACCEPT
+    AT --> ACCEPT
+    GOV --> ACCEPT

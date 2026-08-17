@@ -1,0 +1,86 @@
+---
+- name: Configure a minimal baseline on disposable RHEL lab VMs
+  hosts: lab_targets
+  gather_facts: true
+  become: true
+
+  vars:
+    lab_packages:
+      - chrony
+      - firewalld
+    lab_firewall_zone: public
+    lab_firewall_port: 8080/tcp
+    chrony_servers:
+      - 2.rhel.pool.ntp.org
+
+  pre_tasks:
+    - name: Stop when target is not a RHEL-family disposable lab VM
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.os_family == 'RedHat'
+          - "'lab' in inventory_hostname"
+        fail_msg: Check inventory. Only a named disposable RHEL-family lab VM is allowed.
+      tags:
+        - always
+
+  tasks:
+    - name: Install baseline packages
+      ansible.builtin.package:
+        name: "{{ lab_packages }}"
+        state: present
+      tags:
+        - packages
+
+    - name: Create non-login observation account
+      ansible.builtin.user:
+        name: labobserver
+        comment: Training-only observation account
+        shell: /sbin/nologin
+        create_home: false
+        state: present
+
+    - name: Place training marker with copy module
+      ansible.builtin.copy:
+        dest: /etc/motd.d/99-readiness-lab
+        owner: root
+        group: root
+        mode: "0644"
+        content: |
+          This host is used for the OpenShift platform readiness training lab.
+          Do not store credentials or production data here.
+
+    - name: Render chrony configuration
+      ansible.builtin.template:
+        src: templates/chrony.conf.j2
+        dest: /etc/chrony.conf
+        owner: root
+        group: root
+        mode: "0644"
+        backup: true
+      notify: Restart chronyd
+
+    - name: Ensure chronyd is enabled and started
+      ansible.builtin.service:
+        name: chronyd
+        enabled: true
+        state: started
+
+    - name: Ensure firewalld is enabled and started
+      ansible.builtin.service:
+        name: firewalld
+        enabled: true
+        state: started
+
+    - name: Allow the training HTTP port
+      ansible.posix.firewalld:
+        zone: "{{ lab_firewall_zone }}"
+        port: "{{ lab_firewall_port }}"
+        permanent: true
+        immediate: true
+        state: enabled
+
+  handlers:
+    - name: Restart chronyd
+      ansible.builtin.service:
+        name: chronyd
+        state: restarted

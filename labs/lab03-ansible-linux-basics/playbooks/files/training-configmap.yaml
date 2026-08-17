@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ansible-training
+  namespace: os-ansible-lab
+  labels:
+    environment: training-only
+data:
+  managed-by: ansible
+  contains-sensitive-data: "false"

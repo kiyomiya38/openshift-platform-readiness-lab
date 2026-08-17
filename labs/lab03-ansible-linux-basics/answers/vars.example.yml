@@ -1,0 +1,9 @@
+---
+# 解答例。自分の検証環境に合わせて NTP と firewall zone/port を要確認。
+chrony_servers:
+  - 2.rhel.pool.ntp.org
+lab_firewall_zone: public
+lab_firewall_port: 8080/tcp
+lab_packages:
+  - chrony
+  - firewalld

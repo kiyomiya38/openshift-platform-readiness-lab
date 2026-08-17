@@ -1,0 +1,24 @@
+flowchart TB
+    Need["AI 利用目的を定義\n調査 / 要約 / たたき台 / コード補助"]
+    Policy{"組織・顧客ルールで\nAI 利用可能か"}
+    Stop["利用しない\n承認済みの手段へ切替"]
+    Classify["入力情報を分類"]
+    Sensitive{"顧客情報・個人情報・Secret・\nIP / Host / Log / 構成情報を含むか"}
+    Mask["除外・匿名化・最小化\n再識別リスクも確認"]
+    Approved{"承認済み AI / Model /\n保持設定か"}
+    Prompt["一般化した入力で生成\n出典と仮定を求める"]
+    Verify["人が検証\n公式文書 / 対象 Version / 非本番試験"]
+    Risk{"安全性・正確性・権限・\nライセンスを満たすか"}
+    Revise["修正または破棄\n不足情報を正規ルートで確認"]
+    Review["レビュー・承認\n変更管理 / 証跡管理"]
+    Use["成果物へ反映\nAI 生成箇所・確認者を記録"]
+
+    Need --> Policy
+    Policy -->|"No / 要確認"| Stop
+    Policy -->|"Yes"| Classify --> Sensitive
+    Sensitive -->|"Yes"| Mask --> Approved
+    Sensitive -->|"No"| Approved
+    Approved -->|"No"| Stop
+    Approved -->|"Yes"| Prompt --> Verify --> Risk
+    Risk -->|"No"| Revise --> Prompt
+    Risk -->|"Yes"| Review --> Use

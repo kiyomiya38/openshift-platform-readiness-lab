@@ -1,0 +1,22 @@
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~
+
+# Local credentials and environment-specific configuration
+.env
+.env.*
+!.env.example
+kubeconfig
+kubeconfig.*
+*.key
+*.pem
+
+# Generated evidence and local logs
+artifacts/
+rendered/
+*.log
+

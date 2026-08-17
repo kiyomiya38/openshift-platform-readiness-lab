@@ -1,0 +1,57 @@
+---
+- name: Validate RHEL external-service prerequisites
+  hosts: rhel_support
+  gather_facts: true
+  become: false
+  tasks:
+    - name: Assert that the target is a supported RHEL host
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.distribution == 'RedHat'
+          - ansible_facts.distribution_major_version | int >= 9
+        fail_msg: >-
+          This inventory is limited to approved RHEL support hosts; never add
+          RHCOS OpenShift nodes to it.
+
+    - name: Resolve required cluster host names
+      ansible.builtin.command:
+        argv:
+          - getent
+          - ahostsv4
+          - "{{ item }}"
+      loop: "{{ dns_names_to_check }}"
+      changed_when: false
+
+    - name: Resolve a canary name through the wildcard application record
+      ansible.builtin.command:
+        argv:
+          - getent
+          - ahostsv4
+          - canary.apps.ocp-prd.example.com
+      changed_when: false
+
+    - name: Check HTTPS egress through the organization proxy
+      ansible.builtin.uri:
+        url: https://quay.io/v2/
+        method: GET
+        status_code: [200, 401]
+        return_content: false
+        validate_certs: true
+      environment:
+        https_proxy: "{{ proxy_url }}"
+        HTTPS_PROXY: "{{ proxy_url }}"
+
+    - name: Query local chrony synchronization state
+      ansible.builtin.command:
+        argv: [chronyc, tracking]
+      register: chrony_tracking
+      changed_when: false
+      failed_when: chrony_tracking.rc != 0
+
+    - name: Show preflight reminder without changing hosts
+      ansible.builtin.debug:
+        msg: >-
+          Confirm reverse DNS, UDP/123 to {{ ntp_servers | join(', ') }},
+          TCP/8090 host-to-rendezvous during discovery, and the approved
+          firewall matrix separately. This playbook does not alter RHCOS.
+

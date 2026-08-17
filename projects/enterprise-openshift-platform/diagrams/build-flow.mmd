@@ -1,0 +1,22 @@
+flowchart TD
+    A["G4開始判定\n未承認なら停止"] --> B["外部DNS / NTP / Proxy / FW確認"]
+    B --> C["HAProxy / VIP差分レビューと構築"]
+    C --> D["4.22.zとHardware現物を固定"]
+    D --> E["安全な作業領域へ入力複製\nSecretは外部管理"]
+    E --> F["YAML / Butane / Installer検証"]
+    F --> G{"二者レビュー合格?"}
+    G -- "No" --> X["No-Go\n設計・入力へ戻る"]
+    G -- "Yes" --> H["Agent ISO生成・hash記録"]
+    H --> I{"最終Go/No-Go"}
+    I -- "No" --> X
+    I -- "Go" --> J["BMCで6台をISO起動\nboot disk上書き注意"]
+    J --> K["bootstrap / install監視"]
+    K --> L{"install-completeかつ\nCV/CO/Node正常?"}
+    L -- "No" --> M["停止・ログ保全\nmedia解除・再image判断"]
+    L -- "Yes" --> N["CSI / IdP / 監視 / backupを\n個別承認で構成"]
+    N --> O["sample workloadをdry-run後に適用"]
+    O --> P["基盤・異常・復旧試験"]
+    P --> Q{"受入条件合格?"}
+    Q -- "No" --> R["課題化・差し戻し・再試験"]
+    Q -- "Yes" --> S["G5/G6判定・運用引き継ぎ"]
+

@@ -1,0 +1,31 @@
+flowchart LR
+    subgraph Connected["接続可能ゾーン"]
+        RH["Red Hat Registry\nRelease / Operator Catalog"]
+        App["承認済み App Images"]
+        MirrorHost["Mirror Host\noc-mirror\n対象版は要確認"]
+        Workspace["ImageSetConfiguration\nMetadata / Archive"]
+        RH --> MirrorHost
+        App --> MirrorHost
+        Workspace --> MirrorHost
+    end
+
+    Gate{"持込み審査\nMalware / Signature / Hash / Approval"}
+    Media["承認済み転送媒体または中継領域\n組織規則を要確認"]
+
+    subgraph Disconnected["Disconnected ゾーン"]
+        Registry["Mirror Registry\nTLS / Storage / Backup"]
+        DNS["内部 DNS / NTP / LB"]
+        Config["IDMS / ITMS / CatalogSource\n対象版に応じ要確認"]
+        Cluster["OpenShift Cluster"]
+        Operator["Operator Installation"]
+        Workload["Application Workloads"]
+        Registry --> Config --> Cluster
+        DNS --> Cluster
+        Cluster --> Operator
+        Cluster --> Workload
+    end
+
+    MirrorHost --> Gate --> Media --> Registry
+    Update["定期更新\n差分同期 / CVE / EUS / Rollback 計画"]
+    Update --> Workspace
+    Cluster -. 不足イメージを記録 .-> Update

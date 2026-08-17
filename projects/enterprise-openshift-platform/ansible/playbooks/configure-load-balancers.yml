@@ -1,0 +1,80 @@
+---
+- name: Configure approved RHEL load balancers
+  hosts: load_balancers
+  gather_facts: true
+  become: true
+  pre_tasks:
+    - name: Require an explicit change-window guard
+      ansible.builtin.assert:
+        that:
+          - external_service_change_approved | bool
+          - ansible_facts.distribution == 'RedHat'
+          - ansible_facts.distribution_major_version | int >= 9
+          - inventory_hostname in groups['load_balancers']
+        fail_msg: >-
+          Stop: approved RHEL load-balancer inventory and explicit change guard
+          are required. This playbook must never target RHCOS nodes.
+      tags: [always]
+
+  tasks:
+    - name: Install load-balancer packages
+      ansible.builtin.package:
+        name:
+          - haproxy
+          - keepalived
+          - procps-ng
+        state: present
+      tags: [packages]
+
+    - name: Install the reviewed HAProxy configuration
+      ansible.builtin.template:
+        src: ../templates/haproxy.cfg.j2
+        dest: /etc/haproxy/haproxy.cfg
+        owner: root
+        group: root
+        mode: '0644'
+        backup: true
+        validate: /usr/sbin/haproxy -c -f %s
+      notify: Restart haproxy
+
+    - name: Install the reviewed keepalived configuration
+      ansible.builtin.template:
+        src: ../templates/keepalived.conf.j2
+        dest: /etc/keepalived/keepalived.conf
+        owner: root
+        group: root
+        mode: '0600'
+        backup: true
+      notify: Restart keepalived
+
+    - name: Read HAProxy SELinux connection boolean
+      ansible.builtin.command:
+        argv: [getsebool, haproxy_connect_any]
+      register: haproxy_selinux_boolean
+      changed_when: false
+
+    - name: Permit HAProxy backend connections under SELinux
+      ansible.builtin.command:
+        argv: [setsebool, -P, haproxy_connect_any, '1']
+      when: "'--> on' not in haproxy_selinux_boolean.stdout"
+      changed_when: true
+
+    - name: Enable HAProxy and keepalived
+      ansible.builtin.service:
+        name: "{{ item }}"
+        enabled: true
+        state: started
+      loop:
+        - haproxy
+        - keepalived
+
+  handlers:
+    - name: Restart haproxy
+      ansible.builtin.service:
+        name: haproxy
+        state: restarted
+
+    - name: Restart keepalived
+      ansible.builtin.service:
+        name: keepalived
+        state: restarted

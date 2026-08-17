@@ -1,0 +1,21 @@
+# BROKEN BY DESIGN: 予約済み .invalid ドメインを使い Image pull を必ず失敗させます。
+# 学習用 Namespace 以外に適用しないでください。
+apiVersion: v1
+kind: Pod
+metadata:
+  name: imagepull-broken
+  namespace: os-readiness-lab
+  labels:
+    training-case: imagepull
+spec:
+  automountServiceAccountToken: false
+  containers:
+    - name: app
+      image: registry.example.invalid/training/missing:0.0.0
+      resources:
+        requests:
+          cpu: 5m
+          memory: 8Mi
+        limits:
+          cpu: 20m
+          memory: 32Mi

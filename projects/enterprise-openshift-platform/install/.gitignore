@@ -1,0 +1,9 @@
+# The installer writes credentials and state into its working directory.
+# Keep only reviewed *.example inputs in version control.
+install-config.yaml
+agent-config.yaml
+agent.x86_64.iso
+auth/
+.openshift_install*
+metadata.json
+

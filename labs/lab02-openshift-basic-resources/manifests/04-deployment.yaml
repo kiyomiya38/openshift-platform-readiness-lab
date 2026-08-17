@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lab-web
+  namespace: os-basic-lab
+  labels:
+    app: lab-web
+    app.kubernetes.io/name: lab-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lab-web
+  template:
+    metadata:
+      labels:
+        app: lab-web
+        app.kubernetes.io/name: lab-web
+    spec:
+      serviceAccountName: default
+      automountServiceAccountToken: false
+      containers:
+        - name: web
+          image: registry.k8s.io/e2e-test-images/agnhost:2.53
+          args: ["netexec", "--http-port=8080"]
+          envFrom:
+            - configMapRef:
+                name: lab-app-config
+            - secretRef:
+                name: lab-app-secret
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            # runAsUser は固定せず、restricted SCC の namespace 固有 UID 割当てに委ねる。
+            runAsNonRoot: true
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi

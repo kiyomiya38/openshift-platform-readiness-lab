@@ -1,0 +1,22 @@
+---
+- name: Place a non-sensitive Kubernetes manifest on disposable lab VMs
+  hosts: lab_targets
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: Create training directory
+      ansible.builtin.file:
+        path: /tmp/os-readiness-lab
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Copy training ConfigMap manifest
+      ansible.builtin.copy:
+        src: files/training-configmap.yaml
+        dest: /tmp/os-readiness-lab/training-configmap.yaml
+        owner: root
+        group: root
+        mode: "0644"

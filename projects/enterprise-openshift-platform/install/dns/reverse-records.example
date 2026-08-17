@@ -1,0 +1,12 @@
+; Example fragment for the reverse zone that owns 192.0.2.0/24.
+; The DNS team must adapt owner names to the delegated zone.
+
+10.2.0.192.in-addr.arpa. 300 IN PTR api.ocp-prd.example.com.
+10.2.0.192.in-addr.arpa. 300 IN PTR api-int.ocp-prd.example.com.
+21.2.0.192.in-addr.arpa. 300 IN PTR cp01.ocp-prd.example.com.
+22.2.0.192.in-addr.arpa. 300 IN PTR cp02.ocp-prd.example.com.
+23.2.0.192.in-addr.arpa. 300 IN PTR cp03.ocp-prd.example.com.
+31.2.0.192.in-addr.arpa. 300 IN PTR wk01.ocp-prd.example.com.
+32.2.0.192.in-addr.arpa. 300 IN PTR wk02.ocp-prd.example.com.
+33.2.0.192.in-addr.arpa. 300 IN PTR wk03.ocp-prd.example.com.
+

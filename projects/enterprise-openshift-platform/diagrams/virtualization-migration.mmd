@@ -1,0 +1,61 @@
+flowchart LR
+    subgraph SRC["移行元 VMware（架空）"]
+        VC["vCenter / ESXi"]
+        V1["poc-web-01"]
+        V2["poc-app-01"]
+        V3["poc-db-01"]
+        DS["Datastore"]
+        PG["Port Group"]
+        VC --> V1
+        VC --> V2
+        VC --> V3
+        DS --> V1
+        DS --> V2
+        DS --> V3
+        PG --> V1
+        PG --> V2
+        PG --> V3
+    end
+
+    subgraph MTV["MTV PoC（版・互換性は要確認）"]
+        PR["Provider"]
+        SM["Storage Map"]
+        NM["Network Map"]
+        MP["Migration Plan"]
+        PF["Preflight / Plan validation"]
+        PR --> MP
+        SM --> MP
+        NM --> MP
+        MP --> PF
+    end
+
+    subgraph OCP["OpenShift Container Platform 4.22.z（暫定）"]
+        OLM["OLM"]
+        CNV["OpenShift Virtualization Operator"]
+        HCO["HyperConverged CR"]
+        W["Virtualization Worker x3"]
+        SC["CSI StorageClass（要確認）"]
+        NAD["NAD / OVN-Kubernetes"]
+        D1["Destination VM: web"]
+        D2["Destination VM: app"]
+        D3["Destination VM: db"]
+        OLM --> CNV --> HCO --> W
+        SC --> D1
+        SC --> D2
+        SC --> D3
+        NAD --> D1
+        NAD --> D2
+        NAD --> D3
+    end
+
+    VC --> PR
+    DS --> SM
+    PG --> NM
+    PF -->|"Go 承認後のみ"| D1
+    D1 -->|"Wave 1 合格後"| D2
+    D2 -->|"Wave 2 合格後"| D3
+
+    D1 -. "不合格時: 宛先停止・移行元再開" .-> V1
+    D2 -. "不合格時: 宛先停止・移行元再開" .-> V2
+    D3 -. "不合格時: 宛先停止・移行元再開" .-> V3
+

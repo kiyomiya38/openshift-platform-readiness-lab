@@ -1,0 +1,57 @@
+---
+- name: Optionally apply the training ConfigMap to an explicitly selected cluster
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    openshift_apply_enabled: false
+    training_namespace: os-ansible-lab
+
+  pre_tasks:
+    - name: Require the approved API server when apply is enabled
+      ansible.builtin.assert:
+        that:
+          - expected_api_server is defined
+          - expected_api_server | default('') | length > 0
+        fail_msg: >-
+          Pass the exact approved API server as expected_api_server after
+          checking oc whoami --show-server.
+      when: openshift_apply_enabled | bool
+
+    - name: Read the API server selected by the current oc context
+      ansible.builtin.command:
+        argv:
+          - oc
+          - whoami
+          - --show-server
+      register: selected_api_server
+      changed_when: false
+      check_mode: false
+      when: openshift_apply_enabled | bool
+
+    - name: Stop when the selected cluster is not the approved target
+      ansible.builtin.assert:
+        that:
+          - selected_api_server.stdout | trim == expected_api_server
+        fail_msg: >-
+          Refusing to continue. The current context selects
+          {{ selected_api_server.stdout | trim }}, expected {{ expected_api_server }}.
+      when: openshift_apply_enabled | bool
+
+  tasks:
+    - name: Explain why apply is disabled
+      ansible.builtin.debug:
+        msg: >-
+          Set openshift_apply_enabled=true and expected_api_server only after
+          checking the oc context and namespace.
+      when: not (openshift_apply_enabled | bool)
+
+    - name: Apply training ConfigMap with Kubernetes API
+      kubernetes.core.k8s:
+        state: present
+        namespace: "{{ training_namespace }}"
+        src: files/training-configmap.yaml
+        validate:
+          fail_on_error: true
+      when: openshift_apply_enabled | bool

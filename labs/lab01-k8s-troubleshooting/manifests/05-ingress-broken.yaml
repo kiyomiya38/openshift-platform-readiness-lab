@@ -1,0 +1,77 @@
+# BROKEN BY DESIGN: Ingress backend は Service に存在しない port 9999 を参照します。
+# 外部疎通には環境固有の Ingress Controller、DNS、LB が必要です（要確認）。
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ingress-demo
+  namespace: os-readiness-lab
+  labels:
+    training-case: ingress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ingress-demo
+  template:
+    metadata:
+      labels:
+        app: ingress-demo
+        training-case: ingress
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: app
+          image: registry.k8s.io/e2e-test-images/agnhost:2.53
+          args: ["netexec", "--http-port=8080"]
+          ports:
+            - name: http
+              containerPort: 8080
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+          resources:
+            requests:
+              cpu: 5m
+              memory: 16Mi
+            limits:
+              cpu: 50m
+              memory: 64Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingress-demo
+  namespace: os-readiness-lab
+  labels:
+    training-case: ingress
+spec:
+  selector:
+    app: ingress-demo
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-broken
+  namespace: os-readiness-lab
+  labels:
+    training-case: ingress
+spec:
+  rules:
+    - host: lab.example.invalid
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ingress-demo
+                port:
+                  number: 9999

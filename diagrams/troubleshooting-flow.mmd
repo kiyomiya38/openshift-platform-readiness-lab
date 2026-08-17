@@ -1,0 +1,36 @@
+flowchart TB
+    Detect["検知\nAlert / 問い合わせ / 試験失敗"]
+    Safety["安全確認\n影響・対象 Cluster・権限・変更凍結・連絡"]
+    Scope["症状と範囲を固定\nいつ / 誰に / 何が / 直前変更"]
+    Health["全体正常性\noc get clusterversion / co / nodes / events"]
+    Layer{"最初に異常が見える層"}
+    Workload["Workload\nget / describe / logs / events\nProbe / Image / Resource / SCC"]
+    Network["Network\nDNS -> Route/Ingress -> Service -> Endpoint -> Pod\nNetworkPolicy / LB / Firewall"]
+    Storage["Storage\nPVC -> StorageClass -> PV -> CSI -> Backend"]
+    Operator["Platform / Operator\nSubscription -> InstallPlan -> CSV -> CR -> Operand"]
+    Node["Node\nCondition / Resource / kubelet / CNI / MachineConfig"]
+    Hypothesis["事実と仮説を分離\n仮説ごとに支持・反証を確認"]
+    Mitigation{"安全な暫定対応が\n承認済みか"}
+    Escalate["変更管理またはサポート連携\nマスク済み証跡 / must-gather は要確認"]
+    Act["最小範囲で対応\n観測しながら実施"]
+    Verify["復旧確認\n業務疎通 / Cluster Health / 再発監視"]
+    Done{"合格条件を満たすか"}
+    Report["報告・原因分析・再発防止\n設計 / Test / Monitor / Runbook 更新"]
+
+    Detect --> Safety --> Scope --> Health --> Layer
+    Layer --> Workload
+    Layer --> Network
+    Layer --> Storage
+    Layer --> Operator
+    Layer --> Node
+    Workload --> Hypothesis
+    Network --> Hypothesis
+    Storage --> Hypothesis
+    Operator --> Hypothesis
+    Node --> Hypothesis
+    Hypothesis --> Mitigation
+    Mitigation -->|"No / 高リスク"| Escalate
+    Mitigation -->|"Yes"| Act --> Verify --> Done
+    Escalate --> Hypothesis
+    Done -->|"No"| Hypothesis
+    Done -->|"Yes"| Report

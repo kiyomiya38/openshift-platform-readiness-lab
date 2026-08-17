@@ -1,0 +1,39 @@
+---
+cluster_name: ocp-prd
+base_domain: example.com
+cluster_domain: "{{ cluster_name }}.{{ base_domain }}"
+machine_network_cidr: 192.0.2.0/24
+proxy_url: http://proxy.example.com:3128
+
+dns_names_to_check:
+  - api.ocp-prd.example.com
+  - api-int.ocp-prd.example.com
+  - cp01.ocp-prd.example.com
+  - cp02.ocp-prd.example.com
+  - cp03.ocp-prd.example.com
+  - wk01.ocp-prd.example.com
+  - wk02.ocp-prd.example.com
+  - wk03.ocp-prd.example.com
+
+ntp_servers:
+  - 192.0.2.4
+  - 192.0.2.5
+
+lb_api_vip: 192.0.2.10
+lb_ingress_vip: 192.0.2.11
+lb_interface: enp1s0
+lb_vrrp_router_id: 51
+
+control_plane_backends:
+  - { name: cp01, host: cp01.ocp-prd.example.com }
+  - { name: cp02, host: cp02.ocp-prd.example.com }
+  - { name: cp03, host: cp03.ocp-prd.example.com }
+
+worker_backends:
+  - { name: wk01, host: wk01.ocp-prd.example.com }
+  - { name: wk02, host: wk02.ocp-prd.example.com }
+  - { name: wk03, host: wk03.ocp-prd.example.com }
+
+# This guard must remain false in source control.
+external_service_change_approved: false
+

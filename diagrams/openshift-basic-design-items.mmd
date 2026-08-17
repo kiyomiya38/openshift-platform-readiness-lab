@@ -1,0 +1,29 @@
+flowchart TB
+    Req["要件・制約\n可用性 / 性能 / RPO-RTO / Security / 運用"]
+
+    subgraph Design["OpenShift 基本設計の主な領域"]
+        Cluster["クラスタ・ノード\nTopology / Sizing / Failure Domain"]
+        Network["Network\nDNS / LB / CIDR / Route / Firewall / NetworkPolicy"]
+        Security["認証・認可\nIdP / RBAC / SCC / Certificate / Audit"]
+        Storage["Storage\nCSI / StorageClass / PVC / ODF / Backup"]
+        Platform["Platform 機能\nOperator / Registry / Monitoring / Logging"]
+        Operations["運用\nUpdate / Capacity / Incident / Change / Runbook"]
+        DR["継続性\nBackup / Restore / DR / Migration / Rollback"]
+    end
+
+    Dependencies["外部依存\nCloud / VMware / DNS / NTP / IdP / Storage / Security"]
+    Details["詳細設計・Parameter Sheet"]
+    Build["構築手順・Git 管理"]
+    Test["単体 / 基盤結合 / 障害 / 復旧 / 受入試験"]
+    Ops["運用引継ぎ・監視開始"]
+
+    Req --> Cluster
+    Req --> Network
+    Req --> Security
+    Req --> Storage
+    Req --> Platform
+    Req --> Operations
+    Req --> DR
+    Dependencies --> Design
+    Design --> Details --> Build --> Test --> Ops
+    Test -. 不適合は設計へ戻す .-> Design

@@ -1,0 +1,40 @@
+flowchart TB
+    User["利用者 / 運用者"]
+    IdP["Identity Provider\nOIDC / LDAP など\n要確認"]
+    DNSLB["DNS / Load Balancer\napi と *.apps"]
+
+    subgraph Cluster["OpenShift Cluster"]
+        OAuth["OpenShift OAuth Server"]
+        API["API Server"]
+        Ingress["Ingress Controller / Route"]
+        CP["Control Plane\netcd / scheduler / controllers"]
+        subgraph Workers["Worker / Infra Nodes"]
+            Workload["Pod / Deployment / Service"]
+            Operator["Operator / OLM"]
+            Monitor["Monitoring / Logging"]
+            Registry["Internal Registry"]
+        end
+        Net["OVN-Kubernetes\nPod / Service Network"]
+        Storage["CSI / StorageClass / PVC\nODF または外部ストレージ"]
+    end
+
+    External["外部サービス\nDNS / NTP / Registry / API"]
+    Backup["バックアップ先\nOADP / etcd / Storage"]
+
+    User -->|"oc / Console / HTTPS + token"| DNSLB
+    User -->|"login"| OAuth
+    OAuth -->|"認証を委譲"| IdP
+    IdP -->|"認証結果"| OAuth
+    OAuth -. token を発行 .-> User
+    DNSLB --> API
+    DNSLB --> Ingress
+    API --> CP
+    API --> Operator
+    Ingress --> Workload
+    Workload --- Net
+    Workload --> Storage
+    Operator --> Workload
+    Monitor -. 監視とログ .-> Workload
+    Registry --> Workload
+    Cluster --> External
+    Cluster --> Backup

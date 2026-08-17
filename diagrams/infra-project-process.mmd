@@ -1,0 +1,23 @@
+flowchart LR
+    Req["要求・制約の整理"] --> Basic["基本設計\n方式・責任分界"]
+    Basic --> Detail["詳細設計\n設定値・構成"]
+    Detail --> Procedure["構築・移行・\n切り戻し手順"]
+    Procedure --> Build["構築・単体試験"]
+    Build --> Integration["基盤結合試験"]
+    Integration --> Migration["移行・受入確認"]
+    Migration --> Handover["運用引き継ぎ"]
+    Handover --> Operate["運用・改善"]
+
+    Control["課題・変更・リスク・\nレビュー・証跡管理"]
+    Control -. "全工程を横断" .-> Req
+    Control -.-> Basic
+    Control -.-> Detail
+    Control -.-> Procedure
+    Control -.-> Build
+    Control -.-> Integration
+    Control -.-> Migration
+    Control -.-> Handover
+    Control -.-> Operate
+
+    Integration -. "不適合は設計へ戻す" .-> Basic
+    Operate -. "運用知見を次の要求へ反映" .-> Req

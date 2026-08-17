@@ -1,0 +1,19 @@
+all:
+  children:
+    rhel_support:
+      children:
+        load_balancers:
+          hosts:
+            lb01.example.com:
+              ansible_host: 192.0.2.12
+              lb_vrrp_priority: 110
+              lb_vrrp_peer: 192.0.2.13
+            lb02.example.com:
+              ansible_host: 192.0.2.13
+              lb_vrrp_priority: 100
+              lb_vrrp_peer: 192.0.2.12
+        bastions:
+          hosts:
+            bastion.example.com:
+              ansible_host: 192.0.2.14
+

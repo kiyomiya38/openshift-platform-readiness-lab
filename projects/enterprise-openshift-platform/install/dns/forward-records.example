@@ -1,0 +1,15 @@
+; Example fragment for the ocp-prd.example.com zone.
+; Documentation-only addresses from RFC 5737; do not load unchanged.
+; TTL and serial follow the organization's DNS operations standard.
+
+api.ocp-prd.example.com.       300 IN A 192.0.2.10
+api-int.ocp-prd.example.com.   300 IN A 192.0.2.10
+*.apps.ocp-prd.example.com.    300 IN A 192.0.2.11
+
+cp01.ocp-prd.example.com.      300 IN A 192.0.2.21
+cp02.ocp-prd.example.com.      300 IN A 192.0.2.22
+cp03.ocp-prd.example.com.      300 IN A 192.0.2.23
+wk01.ocp-prd.example.com.      300 IN A 192.0.2.31
+wk02.ocp-prd.example.com.      300 IN A 192.0.2.32
+wk03.ocp-prd.example.com.      300 IN A 192.0.2.33
+

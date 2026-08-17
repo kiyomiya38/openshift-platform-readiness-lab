@@ -1,0 +1,22 @@
+# BROKEN BY DESIGN: 現実的でない 100 TiB の memory request により通常は schedule できません。
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pending-broken
+  namespace: os-readiness-lab
+  labels:
+    training-case: pending
+spec:
+  automountServiceAccountToken: false
+  containers:
+    - name: app
+      image: alpine:3.20
+      command: ["/bin/sh", "-c"]
+      args: ["sleep 3600"]
+      resources:
+        requests:
+          cpu: "1000"
+          memory: 100Ti
+        limits:
+          cpu: "1000"
+          memory: 100Ti

@@ -1,0 +1,43 @@
+flowchart TB
+    User["利用者 / VM 管理者"] --> UI["OpenShift Console / oc / virtctl"]
+
+    subgraph OCP["OpenShift + OpenShift Virtualization"]
+        API["Kubernetes API"]
+        HCO["HyperConverged Operator\nKubeVirt / CDI / Network Addons"]
+        VirtController["virt-controller"]
+        VM["VirtualMachine CR"]
+        VMI["VirtualMachineInstance CR"]
+        DV["DataVolume"]
+        PVC["PVC / StorageClass / CSI"]
+        NAD["NetworkAttachmentDefinition\nMultus"]
+        PodNet["Default Pod Network"]
+        LM["Live Migration Controller"]
+    end
+
+    subgraph Node["Worker Node（仮想化対応）"]
+        Kubelet["kubelet"]
+        Launcher["virt-launcher Pod"]
+        QEMU["QEMU process"]
+        KVM["KVM / CPU virtualization"]
+    end
+
+    VLAN["既存 VLAN / 外部 Network\n要確認"]
+    Storage["共有または移行対応 Storage\n要確認"]
+
+    UI --> API
+    API --> HCO
+    API --> VM
+    VM --> VMI
+    VMI -->|"監視"| VirtController
+    VirtController -->|"Pod 作成要求"| API
+    API -->|"割当済み Pod"| Kubelet
+    Kubelet -->|"Pod を管理"| Launcher
+    Launcher -->|"内包"| QEMU
+    QEMU --> KVM
+    VM --> DV
+    DV --> PVC
+    PVC --> Storage
+    VMI --> PodNet
+    VMI --> NAD
+    NAD --> VLAN
+    LM -. ノード間移行 .-> Launcher

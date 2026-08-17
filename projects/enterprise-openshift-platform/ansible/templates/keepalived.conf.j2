@@ -1,0 +1,33 @@
+# Managed by Ansible. VRRP and firewall design approval is required.
+global_defs {
+  enable_script_security
+  script_user root
+}
+
+vrrp_script chk_haproxy {
+  script "/usr/bin/pgrep -x haproxy"
+  interval 2
+  fall 2
+  rise 2
+  weight -20
+}
+
+vrrp_instance VI_OCP {
+  state BACKUP
+  interface {{ lb_interface }}
+  virtual_router_id {{ lb_vrrp_router_id }}
+  priority {{ lb_vrrp_priority }}
+  advert_int 1
+  unicast_src_ip {{ ansible_host }}
+  unicast_peer {
+    {{ lb_vrrp_peer }}
+  }
+  virtual_ipaddress {
+    {{ lb_api_vip }}/24 dev {{ lb_interface }}
+    {{ lb_ingress_vip }}/24 dev {{ lb_interface }}
+  }
+  track_script {
+    chk_haproxy
+  }
+}
+

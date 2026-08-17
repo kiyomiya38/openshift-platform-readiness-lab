@@ -1,0 +1,21 @@
+---
+- name: Read-only inspection of lab targets
+  hosts: lab_targets
+  gather_facts: true
+  become: false
+
+  tasks:
+    - name: Show only non-sensitive platform facts
+      ansible.builtin.debug:
+        msg:
+          - "host={{ inventory_hostname }}"
+          - "distribution={{ ansible_facts.distribution }} {{ ansible_facts.distribution_version }}"
+          - "kernel={{ ansible_facts.kernel }}"
+          - "architecture={{ ansible_facts.architecture }}"
+
+    - name: Explain supported target for this lab
+      ansible.builtin.assert:
+        that:
+          - ansible_facts.os_family == 'RedHat'
+        fail_msg: This lab is intended for a disposable RHEL-family VM only.
+        success_msg: RHEL-family lab target confirmed.
