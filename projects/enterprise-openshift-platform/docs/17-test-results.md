@@ -6,6 +6,7 @@
 | --- | --- |
 | 文書ID | `TEST-RESULT-OCP-001` |
 | 対象仕様 | [16-test-specification.md](16-test-specification.md) 0.1 |
+| 版／成果物状態 | 0.1／Draft・未レビュー・未承認 |
 | 対象OpenShift／構成 | 4.22.z未確定／commit未設定 |
 | 試験環境 | なし |
 | 実施期間／実施者 | ／ |

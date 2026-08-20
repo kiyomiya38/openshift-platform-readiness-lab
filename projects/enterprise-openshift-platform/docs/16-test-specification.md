@@ -10,6 +10,7 @@
 | 基準日 | 2026-08-17 |
 | 対象版／構成 | OpenShift 4.22.z（z版TBD）／構成commit未設定 |
 | 実施期間／環境 | 未設定／実機環境なし |
+| 技術レビュー | 未レビュー |
 | 実施・確認・承認 | 未設定／未設定／未承認 |
 
 > [!IMPORTANT]
@@ -133,7 +134,7 @@ oc get events -A --sort-by=.lastTimestamp
 | TST-BKP-002 | REQ-BKP-001 | 正常・High | OADPで対象namespace resourceをbackup | 対象/除外/完了状態が設計どおり | Backup CR/log |
 | TST-BKP-003 | REQ-BKP-001 | 正常・High | PV backup/snapshot | アプリ整合点、snapshot、保管先を追跡可能 | snapshot/catalog |
 | TST-BKP-004 | REQ-BKP-001 | 正常・High | 外部DB backup/PITR点確認 | RPO 1時間以内の復旧点と整合手順あり | DB catalog（マスク） |
-| TST-RST-001 | REQ-DR-001 | 復旧・High | 隔離環境でetcd restore演習 | supported手順でAPI/resource状態を復旧 | timeline/log |
+| TST-RST-001 | REQ-DR-001 | 復旧・High | 隔離環境でetcd restore試験 | supported手順でAPI/resource状態を復旧 | timeline/log |
 | TST-RST-002 | REQ-DR-001 | 復旧・High | namespace resource restore | Deployment/Service/Route/RBACが期待版 | diff/oc出力 |
 | TST-RST-003 | REQ-DR-001 | 復旧・High | PV/DBを同じ整合点へ復元 | checksum/業務整合性合格、data loss <=1h | checksum/業務判定 |
 | TST-RST-004 | REQ-DR-002 | 復旧・High | 障害宣言から業務再開承認まで計時 | RTO <=4h。全工程時刻と判断者あり | timeline/承認 |
@@ -149,9 +150,9 @@ oc get events -A --sort-by=.lastTimestamp
 | TST-CAP-001 | REQ-CAP-001 | 容量・High | node停止時のrequests/usage/退避余力を計算 | 1 worker障害後も承認閾値内 | capacity sheet |
 | TST-CAP-002 | REQ-CAP-001 | 容量・Medium | PV消費傾向と増設lead timeを評価 | alert閾値前に増設可能 | trend/forecast |
 | TST-PER-001 | REQ-PER-001 | 性能・High | 合意済み負荷modelでAPI/業務応答を測定 | 合意目標を満たしbottleneckを記録 | test config/raw data |
-| TST-OPS-001 | REQ-OPS-001 | 運用・High | alertから一次切分け・escalation演習 | OLA内に起票、必要情報、担当引継ぎ | ticket/timeline |
+| TST-OPS-001 | REQ-OPS-001 | 運用・High | alertから一次切分け・escalation訓練 | OLA内に起票、必要情報、担当引継ぎ | ticket/timeline |
 | TST-OPS-002 | REQ-OPS-001 | 運用・Medium | Runbookだけで別担当が確認 | 前提、判断、停止、証跡が再現可能 | review record |
-| TST-UPG-001 | REQ-MNT-001 | 更新・High | 非本番で承認z版へupdate演習 | precheck/backup/進捗/postcheck/戻せない境界を記録 | CV/history |
+| TST-UPG-001 | REQ-MNT-001 | 更新・High | 非本番で承認z版へupdate試験 | precheck/backup/進捗/postcheck/戻せない境界を記録 | CV/history |
 | TST-CHG-001 | BR-008 | 変更・High | sample変更を申請から結果まで追跡 | 申請、review、承認、実施、確認、切戻し判定が同一ID | change record |
 | REV-RACI-001 | BR-006 | Review・High | [03-scope-responsibility.md](03-scope-responsibility.md)を各Ownerレビュー | 各成果物/境界にA/Rが合意される | review minutes |
 | REV-QA-001 | BR-010 | Review・High | 期待値、実績、未実施、架空値を横断確認 | 未実施をPass扱いした記載が0件 | QA report |
@@ -163,7 +164,7 @@ oc get events -A --sort-by=.lastTimestamp
 | TST-VIR-001 | REQ-VIR-001 | 前提・High | CPU/Firmware/CSI/network/Operator互換性確認 | 全前提合格、未確定がPoC開始を阻害しない | compatibility matrix |
 | TST-MTV-001 | REQ-MTV-001 | 正常・High | 代表VM 1台をtest migration | 変換・起動・network・disk・tool課題を記録 | Plan/VM/event |
 | TST-MTV-002 | REQ-MTV-001 | 切替・High | 承認windowでwarm/cold cutover候補を計時 | 停止時間と手順がPoC基準内 | timeline |
-| TST-MTV-003 | REQ-MTV-001 | 復旧・High | sourceを保持した切り戻し演習 | 二重稼働を防ぎ、source側で整合して再開 | checklist/業務判定 |
+| TST-MTV-003 | REQ-MTV-001 | 復旧・High | sourceを保持した切り戻し試験 | 二重稼働を防ぎ、source側で整合して再開 | checklist/業務判定 |
 
 これらは本番VM移行の承認試験ではありません。詳細条件はVirtualization/MTV設計・移行計画を正とします。
 

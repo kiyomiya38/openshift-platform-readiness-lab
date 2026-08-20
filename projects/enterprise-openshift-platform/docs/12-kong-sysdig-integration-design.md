@@ -1,7 +1,7 @@
 # 12. Kong・Sysdig 連携設計書
 
 > [!IMPORTANT]
-> 本書は完全に架空の学習用設計です。Kong と Sysdig は **設計のみ** で、製品選定、契約、導入、接続、試験を行っていません。製品版、提供方式、license、OpenShift 4.22.z との互換性はすべて要確認です。
+> 本書は一般公開用の架空プロジェクトにおける連携設計サンプルです。Kong と Sysdig は **設計のみ** で、製品選定、契約、導入、接続、試験を行っていません。製品版、提供方式、license、OpenShift 4.22.z との互換性はすべて要確認です。
 
 ## 1. 文書情報
 
@@ -11,7 +11,7 @@
 | 対象案件 | Example Enterprise OpenShift 基盤導入 |
 | 版 | 0.1 Draft |
 | 基準日 | 2026-08-17 |
-| ステータス | 本人レビュー前・未承認 |
+| ステータス | Draft・未レビュー・未承認 |
 | 実施状態 | Architecture candidate の記述のみ。未構築・未試験 |
 
 共通条件は [SCENARIO](../SCENARIO.md)、security は [Security・Identity 設計](08-security-identity-design.md)、network は [Network・DNS・LB 設計](07-network-dns-lb-design.md)、運用責任は [責任分界図](../diagrams/responsibility-boundary.mmd) を参照します。
@@ -277,7 +277,7 @@ Payload、authorization header、token、personal data を correlation のため
 
 | Review | Status | Note |
 | --- | --- | --- |
-| 本人による理解確認 | 未実施 | [学習ガイド](24-learning-guide.md) に沿って実施予定 |
+| 成果物間の整合レビュー | 未実施 | [成果物利用ガイド](24-deliverable-usage-guide.md)の確認観点を使用する |
 | Kong Product owner review | 未実施 | owner・契約なし |
 | Sysdig Product owner review | 未実施 | owner・契約なし |
 | Platform / Security review | 未実施 | compatibility と data flow 未確認 |

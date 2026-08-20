@@ -8,11 +8,11 @@
 | 上位要件 | `REQ-MON-001`、`REQ-LOG-001`、`REQ-OPS-001`、`REQ-MNT-001`、`REQ-AVL-001` |
 | 版／状態 | 0.1／Draft（机上設計） |
 | 基準日 | 2026-08-17 |
-| 作成 | 生成 AI 支援ドラフト（本人レビュー前） |
+| 作成 | 文書作成チーム（サンプル） |
 | レビュー／承認 | Operations/Platform/Security／運用責任者（未実施） |
 
 > [!IMPORTANT]
-> 本書は架空の学習用机上設計です。監視設定、通知、ログ収集、24x365運用、障害対応、更新は未実施であり、SLO達成または商用運用経験の証明ではありません。
+> 本書は一般公開用の架空プロジェクトにおける机上設計サンプルです。監視設定、通知、ログ収集、24x365運用、障害対応、更新は未実施で、SLOは未承認・未測定です。
 
 ## 1. 運用目標
 
@@ -131,7 +131,7 @@ OpenShift標準監視はcore platformを監視します。user-defined project�
 | 日次 | P1/P2、ClusterOperator/node、backup freshness、log pipeline | 日次check記録 | Operations |
 | 週次 | capacity trend、失敗job、certificate、未解決incident/変更 | 週次report | Platform |
 | 月次 | SLO、alert品質、権限差分、backup世代、脆弱性、費用/容量 | 月次service report | Service owner |
-| 四半期 | RBAC棚卸し、restore drill、failover、Runbook演習 | review/test evidence | 複数Owner |
+| 四半期 | RBAC棚卸し、restore drill、failover、Runbook訓練 | review/test evidence | 複数Owner |
 | 半期 | end-to-end RTO試験、DR gap、architecture review | resilience report | 基盤責任者 |
 | 更新前 | compatibility、release note、backup、手順、通知、No-Go | change record | Platform |
 
@@ -140,7 +140,7 @@ OpenShift標準監視はcore platformを監視します。user-defined project�
 | ID | 方針 | 確認 | Owner |
 | --- | --- | --- | --- |
 | OPS-001 | 24x365一次監視と領域別escalation | 連絡・受付試験 | Operations |
-| OPS-002 | P1〜P4分類とincident commander | tabletop exercise | Operations |
+| OPS-002 | P1〜P4分類とincident commander | tabletop drill | Operations |
 | OPS-003 | Runbookをalertから直接参照 | link/permission check | Platform |
 | OPS-004 | 月間SLOを報告しerror budgetをレビュー | monthly report | Service owner |
 | OPS-005 | backup/log/certificate監視を業務monitoringと同格管理 | simulated alert | Platform |
@@ -148,7 +148,7 @@ OpenShift標準監視はcore platformを監視します。user-defined project�
 | OPS-007 | 更新は非本番先行、互換性review、段階実施 | update plan/test | Platform |
 | OPS-008 | 計画保守は申請、影響、通知、承認、結果を記録 | change record | PM/Operations |
 | OPS-009 | 構成差分と監査logを変更IDへ関連付け | audit sample | PM/Security |
-| OPS-010 | 運用引き継ぎは教育・演習・受領署名まで含む | handover record | Operations |
+| OPS-010 | 運用引き継ぎは教育・訓練・受領署名まで含む | handover record | Operations |
 
 更新時は正確な4.22.z、channel、次version、Operator/CSI/Kong/Sysdig互換性、既知問題を確認します。OpenShiftのdowngradeを通常のrollbackと見なさず、失敗時は作業停止、健全性確認、Red Hatサポート連携、必要時の復旧を個別判断します。
 
@@ -211,4 +211,4 @@ OpenShift標準監視はcore platformを監視します。user-defined project�
 
 | 版 | 日付 | 内容 | 作成者 |
 | --- | --- | --- | --- |
-| 0.1 | 2026-08-17 | 初版 | 生成 AI 支援ドラフト |
+| 0.1 | 2026-08-17 | 初版 | 文書作成チーム（サンプル） |

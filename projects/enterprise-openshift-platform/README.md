@@ -1,134 +1,147 @@
-# 架空エンタープライズ OpenShift 基盤導入プロジェクト
+# Enterprise OpenShift 4.22基盤導入 実務成果物サンプル
 
-## この教材の位置づけ
+## 1. このコンテンツの位置づけ
 
-これは、前回の意見交換で関心が示された「基盤案件を設計から構築・試験・移行・運用までつなげて考える力」を学ぶための、完全に架空の机上プロジェクトです。
+本コンテンツは、インフラストラクチャの実務経験がありOpenShift案件へ初めて参加するエンジニア向けに、基盤導入プロジェクトで使用される成果物例と文書間のつながりを解説する一般公開用サンプルです。
 
-| 項目 | 現在の状態 |
-|---|---|
-| シナリオ・文書・設定例 | AI 支援ドラフト作成済み |
-| 本人による内容確認 | 未着手 |
-| 実機でのクラスタ構築 | 未実施 |
-| コマンド・設定値の実環境検証 | 未実施 |
-| 商用案件での実績 | 本教材からは主張しない |
+知識問題や採点課題は収録していません。架空案件の要求、設計、設定例、手順、試験、移行、運用、管理記録を、実務工程と同じ順序で読み進められるように構成しています。
 
-文書内の値、組織、ホスト、ドメイン、IP アドレスは学習用です。期待結果と実測結果は分け、未実施の作業を成功実績として扱いません。
+| 項目 | 現在のプロジェクト状態 |
+| --- | --- |
+| シナリオ・成果物 | Draft |
+| 技術レビュー | Not Reviewed |
+| 正式承認 | Not Approved |
+| OpenShiftクラスタ構築 | Not Run |
+| 試験72件 | すべて `NOT RUN` |
+| Virtualization / MTV導入・移行 | Not Run |
+| Kong / Sysdig導入 | 対象外（連携設計のみ） |
 
-実案件で必要な帳票は、契約、組織標準、品質管理、調達方式によって増減します。本教材は技術基盤担当が要件から運用引き継ぎまでを学ぶための主要文書を収録し、契約書、見積・発注、実在組織固有の申請書は対象外とします。
+文書が揃っていることは、設計の承認、製品互換性、構築成功、試験合格を意味しません。共通条件と公開上の境界は[共通シナリオ](SCENARIO.md)、成果物状態と証跡の扱いは[プロジェクト証跡索引](evidence/README.md)を正とします。
 
-## 想定プロジェクト
+## 2. 架空案件の概要
 
-- オンプレミスの x86_64 ベアメタルへ OpenShift Container Platform を導入する
-- 3 台のコントロールプレーンと 3 台のワーカーノードで構成する
-- Agent-based Installer と platform none を利用する
-- 外部 DNS、NTP、ロードバランサー、プロキシ、CSI ストレージと連携する
-- 第 2 段階で OpenShift Virtualization と MTV を使った VM 移行 PoC を計画する
-- Kong と Sysdig は連携設計までを対象とし、導入済みとはしない
+- OpenShift Container Platform 4.22.zをオンプレミスのx86_64ベアメタルへ導入する。
+- Control Plane 3台、Worker 3台で構成する。
+- Agent-based Installerと`platform: none`を使用する。
+- 外部DNS、NTP、Load Balancer、Proxy、CSIストレージと連携する。
+- 第1段階はOpenShift基盤、第2段階はOpenShift VirtualizationとMTVによる代表VM 3台の移行PoCとする。
+- KongとSysdigは連携点を設計するが、製品選定・導入・接続は行わない。
 
-前提値と判断境界は [SCENARIO.md](SCENARIO.md) を参照してください。
+詳細な前提値、架空アドレス、未確定事項は[SCENARIO.md](SCENARIO.md)に集約しています。
 
-## 学習の進め方
+## 3. 技術領域と適用境界
 
-最初は文書を 00 から 24 まで番号順に読みます。これは知識問題ではなく、成果物をレビューする演習です。各文書について、次の四つを自分の言葉で整理し、[学習ログ](evidence/learning-log.md) に残してください。
+| 技術領域 | 本サンプルでの扱い | 主な参照先 |
+| --- | --- | --- |
+| OpenShift Container Platform 4.22 | 第1段階の構築対象。ただし実機作業はNot Run | [基本設計](docs/05-basic-design.md)、[構築手順](docs/15-build-procedure.md) |
+| RHEL / Ansible | DNS・LBなど周辺RHELサーバーの設定例 | [Ansible package](ansible/README.md) |
+| OpenShift Virtualization / MTV | 第2段階のPoC設計・移行計画。導入と移行はNot Run | [Virtualization・MTV設計](docs/11-virtualization-mtv-design.md) |
+| Kong / Sysdig | インターフェースと責任分界の設計のみ | [Kong・Sysdig連携設計](docs/12-kong-sysdig-integration-design.md) |
+| ROSA / ARO | オンプレミス方式との比較対象。構築対象外 | [基本設計](docs/05-basic-design.md) |
+| OpenShift AI | 将来検討領域。今回の要件・設計・構築対象外 | [共通シナリオ](SCENARIO.md) |
+| Disconnected環境 | 将来検討領域。今回はProxy経由のconnected構成 | [共通シナリオ](SCENARIO.md)、[ネットワーク設計](docs/07-network-dns-lb-design.md) |
 
-1. なぜその文書が必要か
-2. 何を入力として、何を決定・出力するか
-3. 未決事項やリスクを誰と合意するか
-4. 後続の設計・構築・試験へどう引き継ぐか
+Ansibleは周辺RHELサーバーを対象とし、RHCOSノードのパッケージ導入や直接設定変更には使用しません。RHCOSの構成変更は対象版でサポートされるMachineConfig等の方式を前提とします。
 
-読むだけで終わらせず、文書中の「要確認」「未決」「未実施」を探し、根拠と確認方法を学習記録へ残します。実機を用意できた時点で、机上の期待値を実測値へ置き換えます。
+## 4. 成果物の読み方
 
-## 文書一覧
+成果物は`00`から`24`まで番号順に並んでいます。各文書では、次の関係に注目すると、実務上の役割を追いやすくなります。
 
-### プロジェクト開始・要求整理
+```text
+要求
+  → 前提・制約・責任分界
+    → 基本設計・方式判断
+      → 詳細値・構築資材・作業手順
+        → 試験仕様・結果・証跡
+          → 移行・ロールバック・運用
+            → 課題・変更・ADR
+```
 
-| 番号 | 文書 | 主な学習対象 |
-|---:|---|---|
-| 00 | [プロジェクト憲章](docs/00-project-charter.md) | 目的、範囲、体制、完了条件 |
-| 01 | [要件定義書](docs/01-requirements.md) | 業務・機能・非機能・移行要求 |
-| 02 | [前提条件・制約事項一覧](docs/02-assumptions-constraints.md) | 前提、制約、未決事項、依存関係 |
-| 03 | [スコープ・責任分界表](docs/03-scope-responsibility.md) | 対象範囲、RACI、組織間インターフェース |
-| 04 | [要件トレーサビリティ](docs/04-requirements-traceability.md) | 要件から設計・実装・試験への対応 |
+文書ごとの目的、入力、主要な判断、後続成果物、レビュー観点は[24. 成果物利用ガイド](docs/24-deliverable-usage-guide.md)で解説します。
 
-### 基本設計
+## 5. 文書一覧
 
-| 番号 | 文書 | 主な学習対象 |
-|---:|---|---|
-| 05 | [基本設計書](docs/05-basic-design.md) | 全体方式、クラスタ構成、設計判断 |
-| 06 | [アーキテクチャ設計書](docs/06-architecture-design.md) | 物理・論理構成、ノード役割、通信フロー |
-| 07 | [ネットワーク・DNS・LB 設計書](docs/07-network-dns-lb-design.md) | 名前解決、VIP、通信、負荷分散 |
-| 08 | [セキュリティ・認証認可設計書](docs/08-security-identity-design.md) | 認証、権限、証明書、秘密情報、監査 |
-| 09 | [ストレージ・バックアップ・復旧設計書](docs/09-storage-backup-design.md) | CSI、Registry、データ保護、etcd、RPO/RTO |
-| 10 | [監視・ログ・運用設計書](docs/10-observability-operations-design.md) | 監視、ログ、通知、定常運用 |
-| 11 | [Virtualization・MTV 設計書](docs/11-virtualization-mtv-design.md) | VM 実行基盤、移行 PoC、責任分界 |
-| 12 | [Kong・Sysdig 連携設計書](docs/12-kong-sysdig-integration-design.md) | API・セキュリティ製品との接続点 |
+### 5.1 プロジェクト開始・要求整理
 
-### 詳細設計・構築・試験
+| 番号 | 成果物 | 実務での役割 |
+| ---: | --- | --- |
+| 00 | [プロジェクト憲章](docs/00-project-charter.md) | 目的、範囲、体制、ゲート、完了条件を定める |
+| 01 | [要件定義書](docs/01-requirements.md) | 業務・機能・非機能・移行・運用要求を識別する |
+| 02 | [前提条件・制約・未確定事項](docs/02-assumptions-constraints.md) | 事実、仮定、制約、TBDと解消責任を管理する |
+| 03 | [スコープ・責任分界書](docs/03-scope-responsibility.md) | 対象範囲、RACI、組織間インターフェースを定める |
+| 04 | [要件トレーサビリティ](docs/04-requirements-traceability.md) | 要件から設計・実装・試験・運用までを追跡する |
 
-| 番号 | 文書 | 主な学習対象 |
-|---:|---|---|
-| 13 | [詳細設計書](docs/13-detailed-design.md) | 実装可能な粒度への具体化 |
-| 14 | [パラメータシート](docs/14-parameter-sheet.md) | ホスト、IP、DNS、CIDR、設定値 |
-| 15 | [構築手順書](docs/15-build-procedure.md) | 事前確認、生成、導入、引き渡し |
-| 16 | [試験仕様書](docs/16-test-specification.md) | 試験観点、手順、期待結果、判定基準 |
-| 17 | [試験結果書](docs/17-test-results.md) | 未実施状態から実測を記録する方法 |
+### 5.2 基本設計
 
-### 移行・運用・管理
+| 番号 | 成果物 | 実務での役割 |
+| ---: | --- | --- |
+| 05 | [OpenShift基盤 基本設計書](docs/05-basic-design.md) | 技術方式と採用理由を定める |
+| 06 | [クラスタ構成・アーキテクチャ設計書](docs/06-architecture-design.md) | 物理・論理構成、依存関係、障害領域を定める |
+| 07 | [ネットワーク・DNS・LB設計書](docs/07-network-dns-lb-design.md) | アドレス、名前解決、VIP、通信、負荷分散を定める |
+| 08 | [セキュリティ・認証認可設計書](docs/08-security-identity-design.md) | IdP、RBAC、SCC、Secret、証明書、監査を定める |
+| 09 | [ストレージ・バックアップ・復旧設計書](docs/09-storage-backup-design.md) | CSI、Registry、保護対象、RPO/RTO、復旧方式を定める |
+| 10 | [監視・ログ・運用設計書](docs/10-observability-operations-design.md) | signal、alert、通知、保守、runbookの方針を定める |
+| 11 | [Virtualization・MTV設計書](docs/11-virtualization-mtv-design.md) | VM実行基盤、移行方式、PoC判定、責任分界を定める |
+| 12 | [Kong・Sysdig連携設計書](docs/12-kong-sysdig-integration-design.md) | 周辺製品との接続点、権限、通信、選定Gateを定める |
 
-| 番号 | 文書 | 主な学習対象 |
-|---:|---|---|
-| 18 | [移行計画書](docs/18-migration-plan.md) | リハーサル、切替、判定、体制 |
-| 19 | [ロールバック計画書](docs/19-rollback-plan.md) | 発動条件、復旧順序、判断権限 |
-| 20 | [運用引継ぎ書](docs/20-operations-handover.md) | 定常・非定常作業、監視、連絡 |
-| 21 | [課題・リスク管理表](docs/21-issue-risk-register.md) | リスク、課題、対策、期限、担当 |
-| 22 | [変更管理表](docs/22-change-register.md) | 変更理由、影響、承認、戻し方 |
-| 23 | [アーキテクチャ判断記録](docs/23-architecture-decisions.md) | 選択肢、根拠、トレードオフ |
-| 24 | [学習ガイド](docs/24-learning-guide.md) | 読み方、深掘り、成果の残し方 |
+### 5.3 詳細設計・構築・試験
 
-## 実装資料
+| 番号 | 成果物 | 実務での役割 |
+| ---: | --- | --- |
+| 13 | [詳細設計書](docs/13-detailed-design.md) | 基本設計を実装可能な単位へ具体化する |
+| 14 | [パラメータシート](docs/14-parameter-sheet.md) | ホスト、IP、CIDR、ポート、設定値の正本を管理する |
+| 15 | [構築手順書](docs/15-build-procedure.md) | 事前確認、変更、確認、停止条件、戻し方を定める |
+| 16 | [試験仕様書](docs/16-test-specification.md) | 正常・異常・復旧の条件、手順、期待値、証跡を定める |
+| 17 | [試験結果書](docs/17-test-results.md) | 72試験のactual resultと証跡を記録する。現在は全件`NOT RUN` |
 
-- [install/](install/)：インストーラー入力例と事前確認資料
-- [ansible/](ansible/)：周辺サーバー準備の学習用自動化例
-- [manifests/](manifests/)：導入後に適用する学習用 Manifest 例
-- [diagrams/](diagrams/)：構成、通信、工程、責任分界の図
-- [evidence/](evidence/)：本人レビュー、検証、学習の記録
+### 5.4 移行・運用・プロジェクト管理
 
-Ansible の対象は踏み台、DNS、ロードバランサーなどの周辺 RHEL サーバーです。RHCOS ノードへパッケージ導入や直接設定変更を行う用途にはしません。
+| 番号 | 成果物 | 実務での役割 |
+| ---: | --- | --- |
+| 18 | [移行計画書](docs/18-migration-plan.md) | リハーサル、wave、切替、Go/No-Go、証跡を定める |
+| 19 | [ロールバック計画書](docs/19-rollback-plan.md) | 発動条件、write authority、復旧順序、判断期限を定める |
+| 20 | [運用引き継ぎ書](docs/20-operations-handover.md) | 定常・非定常作業、監視、連絡、受入条件を定める |
+| 21 | [課題・リスク管理表](docs/21-issue-risk-register.md) | 課題、リスク、対策、owner、期限を追跡する |
+| 22 | [変更管理表](docs/22-change-register.md) | 変更理由、影響、承認、実施状態、戻し方を追跡する |
+| 23 | [アーキテクチャ判断記録](docs/23-architecture-decisions.md) | 選択肢、判断、根拠、影響、再検討条件を残す |
+| 24 | [成果物利用ガイド](docs/24-deliverable-usage-guide.md) | 各成果物の役割、受け渡し、レビュー観点を解説する |
 
-## 実機がない段階でできること
+## 6. 構築資材と証跡様式
 
-- 要件 ID と設計・試験項目の対応を追う
-- 各設計値の採用理由と代替案を説明する
-- YAML、Ansible、Mermaid の構文を静的に検査する
-- 構築手順の入力、操作、期待結果、失敗時判断をレビューする
-- 不明点を課題・リスク・変更・判断記録へ分類する
+| ディレクトリ | 内容 | 現在の状態 |
+| --- | --- | --- |
+| [install/](install/) | Installer入力、DNS、HAProxy、keepalived、Butaneの例 | サンプル／実環境適用Not Run |
+| [ansible/](ansible/) | 周辺RHELサーバー向けinventory、variables、playbook、template | サンプル／実行Not Run |
+| [manifests/](manifests/) | Namespace、RBAC、Quota、NetworkPolicy、Deployment、Service、Route、PDB | サンプル／適用Not Run |
+| [diagrams/](diagrams/) | 構成、通信、構築フロー、VM移行、責任分界 | Draft |
+| [evidence/](evidence/) | 成果物レビュー、静的検証、実行ログ、試験証跡、公開時の機密除去基準 | 様式のみ／レビュー・実行Not Run |
 
-実クラスタの到達性、製品互換性、性能、可用性、バックアップ復元性は、静的確認だけでは証明できません。
+## 7. 実務で区別する状態
 
-## 実機を用意した後に行うこと
+| 状態 | 意味 |
+| --- | --- |
+| Draft | 内容が作成途中または正式レビュー前 |
+| Not Reviewed | 技術的な妥当性を指定レビュアーが確認していない |
+| Not Approved | 意思決定者の正式承認を得ていない |
+| Not Run / `NOT RUN` | 構築、試験、移行、復旧などを実行していない |
+| Blocked | 前提不成立により判定まで進めない |
+| Fail | 実行したが期待結果を満たさない |
+| Pass | 承認済み条件で実行し、actual resultと証跡が期待結果を満たす |
 
-1. 使用する OpenShift の正確な z リリースと関連製品の互換性を確認する
-2. 実環境値を承認済みパラメータシートへ反映する
-3. 構築手順書に従い、操作ログと差異を保存する
-4. 試験仕様書を実施し、試験結果書へ実測値と証跡を記録する
-5. 不具合や設計差異を課題・変更・判断記録へ反映する
-6. 第三者レビュー後にだけ、実機検証済みの状態へ更新する
+期待結果、設定例、サンプル出力をactual resultや`Pass`として扱いません。
 
-## 安全上の注意
+## 8. 使用上の注意
 
 - 例示値を実環境へそのまま適用しないでください。
-- pull secret、SSH 秘密鍵、認証情報、実顧客の構成・ログをコミットしないでください。
-- 変更・停止・削除・切替操作は、対象、影響、承認、ロールバックを確認してから実施します。
-- 生成 AI へ入力できる情報は案件規程に従い、顧客情報や秘密情報を一般化・匿名化します。
+- OCPの正確な4.22.z、Installer、Operator、CSI、MTV、Kong、Sysdigの互換性とサポート条件は実施直前に確認してください。
+- pull secret、password、token、SSH秘密鍵、kubeconfig、証明書秘密鍵をリポジトリへ保存しないでください。
+- 実在する組織名、担当者名、内部FQDN/IP/MAC、ticket、連絡先、ログ、support bundleは公開用に除去・置換してください。
+- 変更・停止・削除・切替操作は、対象、影響、承認、停止条件、ロールバックを確認してから実施してください。
+- 公開時の検査項目は[公開・機密除去基準](evidence/publication-safety.md)を参照してください。
 
-## 元教材との関係
+## 9. 最初に参照するファイル
 
-このプロジェクトは、次の横断教材を一つの架空案件へ当てはめた実務演習です。
-
-- [基盤案件の工程](../../docs/05-infra-project-process.md)
-- [OpenShift の基本知識](../../docs/06-openshift-core-knowledge.md)
-- [OpenShift 基本設計](../../docs/07-openshift-basic-design.md)
-- [設計・管理文書ガイド](../../docs/24-design-document-guide.md)
-- [試験文書ガイド](../../docs/25-test-document-guide.md)
-
-技術本文の理解が不足している場合は、該当章へ戻ってから本プロジェクトの設計判断を読み直します。
+1. [共通シナリオ](SCENARIO.md)で架空条件と適用境界を確認する。
+2. [00. プロジェクト憲章](docs/00-project-charter.md)から番号順に成果物を確認する。
+3. 文書の役割が不明な場合は[24. 成果物利用ガイド](docs/24-deliverable-usage-guide.md)の対応節を参照する。
+4. 実行済みと計画を区別する場合は[プロジェクト証跡索引](evidence/README.md)を参照する。

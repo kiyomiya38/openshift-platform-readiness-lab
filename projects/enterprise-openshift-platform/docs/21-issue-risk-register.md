@@ -10,7 +10,7 @@
 | 文書 ID | PM-IR-001 |
 | 版 | 0.1 Draft |
 | 基準日 | 2026-08-17 |
-| ステータス | 本人レビュー前・未承認 |
+| ステータス | Draft・未レビュー・未承認 |
 | Risk owner | 各行の role。実名未定 |
 | Review cadence | weekly candidate + 各 Gate 前 |
 
@@ -31,7 +31,7 @@ Likelihood と Impact を 1〜5 で評価し、`Score = Likelihood × Impact` �
 | 8〜14 | Medium | owner、trigger、treatment、due を設定 |
 | 1〜7 | Low | monitoring と定期 review |
 
-Impact `5` は score にかかわらず Change manager / Service owner へ報告します。数値は学習用 rule で、正式組織基準が優先します。
+Impact `5` はscoreにかかわらずChange manager / Service ownerへ報告します。数値はサンプル上のruleで、採用組織の正式基準が優先します。
 
 ## 4. Issue register
 
@@ -47,7 +47,7 @@ Impact `5` は score にかかわらず Change manager / Service owner へ報告
 | ISS-008 | OADP/object storage/CSI backup 組合せ未確定 | RPO/RTO を検証できない | Platform + Storage | Test Gate | supported version と restore plan を選定 | Open |
 | ISS-009 | Kong product/version/topology/license 未選定 | API Gateway integration を構築できない | Product owner | Optional Product Gate | KIC/Operator/Konnect と plugin edition を比較 | Open |
 | ISS-010 | Sysdig offering/version/module/license 未選定 | agent/data/security control を確定できない | Product owner + Security | Optional Product Gate | SaaS/on-prem、Agent/Shield、data residency を比較 | Open |
-| ISS-011 | 実際の lab / cluster がない | build/test/migration evidence を取得できない | Learning owner | Before execution | approved lab と budget を用意する | Open |
+| ISS-011 | 実際のlab / clusterがない | build/test/migration evidenceを取得できない | Project manager | Before execution | approved labとbudgetを用意する | Open |
 | ISS-012 | 実運用担当、on-call、vendor contacts 未定 | handover/escalation 不可 | Service owner | Handover Gate | role に実名と連絡手段を割り当てる | Open |
 | ISS-013 | certificate issuer、Proxy CA、rotation owner 未確定 | install、TLS、renewal の failure risk | Security | Build Gate | certificate inventory と責任者を確定 | Open |
 | ISS-014 | source baseline と performance acceptance 未取得 | PoC 性能を判定できない | Application | D-15 | CPU/memory/IO/network/app baseline を測定 | Open |
@@ -73,8 +73,8 @@ Impact `5` は score にかかわらず Change manager / Service owner へ報告
 | RSK-013 | Proxy/CA/certificate renewal failure で registry/operator/API 接続不能 | 3 | 4 | 12 | Medium | expiry monitoring、overlap rotation、trust inventory | failure 時は approved prior cert / issuer escalation | Security + Network | TBD |
 | RSK-014 | monitoring noise / false positive により重大 alert を見逃す | 4 | 3 | 12 | Medium | owner、severity、tuning、synthetic alert test | SLO breach で rule/route review | Operations + Security | TBD |
 | RSK-015 | documentation と as-built drift で誤操作 | 4 | 4 | 16 | High | Git revision、post-change update、drift review | mismatch 発見時は change freeze | Change manager | TBD |
-| RSK-016 | 学習資料を実機経験として誤って表現する | 3 | 4 | 12 | Medium | status banner、evidence gate、本人説明確認 | external submission 前に claim audit | Learning owner | TBD |
-| RSK-017 | AI 生成内容に誤り・古い API が含まれる | 4 | 4 | 16 | High | primary source、version pin、human review、lab validation | discrepancy なら correction と source log 更新 | Learning owner | TBD |
+| RSK-016 | サンプルを承認済み・実機検証済みの成果物として誤適用する | 3 | 4 | 12 | Medium | status banner、成果物状態、公開前検査 | [公開・機密除去基準](../evidence/publication-safety.md)に沿ってrelease review | Documentation owner | Open |
+| RSK-017 | 参照情報に誤り・対象版と異なるAPIが含まれる | 4 | 4 | 16 | High | primary source、version pin、technical review、non-production validation | discrepancyならcorrectionとsource logを更新 | Architecture owner | Open |
 
 ## 6. Risk response planning
 

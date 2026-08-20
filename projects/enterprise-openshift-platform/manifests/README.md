@@ -1,6 +1,6 @@
 # 安全なサンプルワークロード
 
-`example-web-dev` Namespaceへ、非特権のHTTPサンプルを配置する学習用Manifestです。クラスタがないため適用・server-side validation・動作確認は**未実施**です。
+`example-web-dev` Namespaceへ非特権のHTTPサンプルを配置する、一般公開用のManifest例です。クラスタがないため適用・server-side validation・動作確認は**未実施**です。
 
 主な安全策は次のとおりです。
 

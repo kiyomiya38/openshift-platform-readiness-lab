@@ -1,7 +1,7 @@
 # 18. 移行計画書
 
 > [!IMPORTANT]
-> 本書は架空の学習用計画です。移行は **未実施** で、日付、担当者、製品版、停止時間は未承認です。3 VM の移行は本番承認ではなく、技術課題を抽出する PoC として扱います。
+> 本書は一般公開用の架空プロジェクトにおける移行計画サンプルです。移行は **未実施** で、日付、担当者、製品版、停止時間は未承認です。3 VMの移行は本番承認ではなく、技術課題を抽出するPoCとして扱います。
 
 ## 1. 文書情報
 
@@ -11,7 +11,7 @@
 | 対象案件 | Example Enterprise OpenShift 基盤導入 |
 | 版 | 0.1 Draft |
 | 基準日 | 2026-08-17 |
-| ステータス | 本人レビュー前・未承認 |
+| ステータス | Draft・未レビュー・未承認 |
 | Migration manager | 未定（役割のみ定義） |
 | Change ID | 未採番 |
 | 実施状態 | 全 wave Not Run |
@@ -61,7 +61,7 @@
 
 ### 4.2 Wave overview
 
-| Wave | Workload | Method | Planned outage | Main learning objective | Current status |
+| Wave | Workload | Method | Planned outage | Primary validation objective | Current status |
 | --- | --- | --- | --- | --- | --- |
 | 0 | sample container workload | manifests / build procedure | 非本番のため N/A | Route、Service、RBAC、NetworkPolicy の基本経路 | Not Run |
 | 1 | `poc-web-01` | MTV cold | 実測して記録 | 基本 transfer / conversion / boot / network | Not Run |
@@ -262,7 +262,7 @@ Warm migration では source VM を稼働させたまま precopy し、承認さ
 | Rollback | Change manager | users/operations | trigger、impact、expected recovery、next update |
 | Closure | Migration manager | stakeholders | final state、evidence、issues、next wave |
 
-実際の連絡先、chat、ticket、phone bridge は運用標準に従い、外部提出版では削除します。
+実際の連絡先、chat、ticket、phone bridge は運用標準に従い、公開版へは含めません。
 
 ## 12. Evidence checklist
 

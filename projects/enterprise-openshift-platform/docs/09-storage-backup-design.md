@@ -8,11 +8,11 @@
 | 上位要件 | `REQ-STG-001`、`REQ-BKP-001`、`REQ-DR-001`、`REQ-DR-002` |
 | 版／状態 | 0.1／Draft（机上設計） |
 | 基準日 | 2026-08-17 |
-| 作成 | 生成 AI 支援ドラフト（本人レビュー前） |
+| 作成 | 文書作成チーム（サンプル） |
 | レビュー／承認 | Storage/Platform/Application／基盤責任者（未実施） |
 
 > [!IMPORTANT]
-> 本書は架空の学習用机上設計です。CSI、OADP、Snapshot、DBバックアップ、復元性能は未選定・未実施であり、RPO/RTOを達成した証拠や商用経験の証明ではありません。
+> 本書は一般公開用の架空プロジェクトにおける机上設計サンプルです。CSI、OADP、Snapshot、DBバックアップ、復元性能は未選定・未実施で、RPO/RTOは目標値であり達成確認済みの値ではありません。
 
 ## 1. RPO/RTOの適用範囲
 
@@ -109,7 +109,7 @@
 
 ## 8. OADP・アプリ保護
 
-- OADPはcustomer workload namespaceと関連cluster-scope resourceの範囲を設計します。
+- OADPは業務workload namespaceと関連cluster-scope resourceの範囲を設計します。
 - Operator自体をアプリbackupへ無条件に含めず、対象版の公式除外要件を確認します。
 - backup selectionはnamespace/label/resource typeで明示し、platform namespaceを一括対象にしません。
 - CSI Snapshotの整合性はstorage snapshotだけではDB transaction整合を保証しないため、pre/post hookまたはDB native方式を組み合わせます。
@@ -155,7 +155,7 @@
 | TST-STG-006 | Storage性能 | 導入・変更時 | 合意済みIOPS/latency目標を満たす | profile/raw result | 未実施 |
 | TST-BKP-001 | etcd backup取得・検査 | 月次案 | fileset、size、hash、off-cluster copy確認 | backup log/hash | 未実施 |
 | TST-BKP-002 | OADP backup | 月次案 | errorなし、対象resource/PV存在 | Backup CR/object list | 未実施 |
-| TST-RST-001 | etcd restore演習 | 半期案 | 隔離環境で対象z版の公式手順によりAPI/resource状態を復旧 | timeline/log | 未実施 |
+| TST-RST-001 | etcd restore試験 | 半期案 | 隔離環境で対象z版の公式手順によりAPI/resource状態を復旧 | timeline/log | 未実施 |
 | TST-RST-002 | namespace resource restore | 四半期案 | Deployment/Service/Route/RBACが期待版へ復元 | diff/`oc`出力 | 未実施 |
 | TST-RST-003 | PV/DB整合復元 | 四半期案 | 同一整合点、data loss≤1h、業務整合OK | time/checksum/業務判定 | 未実施 |
 | TST-RST-004 | end-to-end RPO/RTO | 半期案 | 障害宣言から業務承認≤4h | timeline/approval | 未実施 |
@@ -199,4 +199,4 @@
 
 | 版 | 日付 | 内容 | 作成者 |
 | --- | --- | --- | --- |
-| 0.1 | 2026-08-17 | 初版 | 生成 AI 支援ドラフト |
+| 0.1 | 2026-08-17 | 初版 | 文書作成チーム（サンプル） |

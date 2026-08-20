@@ -1,7 +1,7 @@
 # 23. Architecture Decision Record（ADR）
 
 > [!IMPORTANT]
-> 本書は架空の学習用 ADR です。`シナリオ固定` は本演習内の前提を表し、実案件の承認、構築、検証を意味しません。`Proposed` / `Deferred` は未決定です。
+> 本書は一般公開用の架空プロジェクトにおけるADRサンプルです。`シナリオ固定`はサンプル内の前提を表し、実案件の承認、構築、検証を意味しません。`Proposed` / `Deferred`は未決定です。
 
 ## 1. 文書情報
 
@@ -10,14 +10,14 @@
 | 文書 ID | ARC-ADR-001 |
 | 版 | 0.1 Draft |
 | 基準日 | 2026-08-17 |
-| ステータス | 本人レビュー前・未承認 |
+| ステータス | Draft・未レビュー・未承認 |
 | Decision authority | 案件責任者 / Architecture review board（未定） |
 
 ## 2. Status meanings
 
 | Status | Meaning |
 | --- | --- |
-| シナリオ固定 | 学習シナリオを成立させるために与えられた前提。実案件承認ではない |
+| シナリオ固定 | 架空プロジェクトの一貫性を保つために与えられた前提。実案件承認ではない |
 | Proposed | review / evidence / approval 前の候補 |
 | Accepted | authority が decision と consequences を承認 |
 | Deferred | dependency 不成立または current scope 外で先送り |
@@ -40,11 +40,11 @@
 | ADR-009 | Sysdig は design-only、offering/agent/data 選定を延期 | Deferred | security/observability integration を current build scope に入れない |
 | ADR-010 | connected + organization Proxy、Disconnected は対象外 | シナリオ固定 | external registry/catalog dependency を持つ |
 | ADR-011 | OpenShift AI と production VM bulk migration は対象外 | シナリオ固定 | platform core と representative PoC に集中 |
-| ADR-012 | evidence は Not Run / Blocked / Fail / Pass を明示 | シナリオ固定 | 未実施を能力・成功として提示しない |
+| ADR-012 | evidenceはNot Run / Blocked / Fail / Passを明示 | シナリオ固定 | 未実施を完了・合格として記録しない |
 
 ## 4. ADR-001: Target platform
 
-**Context:** 社内 Web/API と代表 VM を共通基盤へ段階収容する学習シナリオです。ROSA / ARO は比較対象ですが build 対象ではありません。
+**Context:** 社内Web/APIと代表VMを共通基盤へ段階収容する架空シナリオです。ROSA / AROは比較対象ですがbuild対象ではありません。
 
 **Decision:** on-premises x86_64 bare metal 上の OpenShift Container Platform 4.22.z（暫定）を target とします。
 
@@ -102,7 +102,7 @@
 
 **Context:** [SCENARIO](../SCENARIO.md)の`BR-009`は、VM移行を本番承認ではなく代表VM 3台のPoCに限定しています。VM名、役割、wave順序、Cold/Warm方式まではシナリオ固定値ではありません。
 
-**Decision:** PoC対象を代表VM 3台に限定し、技術課題と実測値を収集します。PoC完了をproduction bulk migration、VMware廃止、商用移行経験の証明に使用しません。
+**Decision:** PoC対象を代表VM 3台に限定し、技術課題と実測値を収集します。PoC完了だけをproduction bulk migrationやVMware廃止の承認条件にはしません。
 
 **Consequences:** 3台以外のguest、device、性能、運用条件を代表できるとは限らず、追加対象は別のscope/change/acceptanceが必要です。
 
@@ -116,7 +116,7 @@
 
 **Alternatives:** 異なる代表VM・wave順序、一括plan、全VM Cold、全VM Warm、manual disk conversion。
 
-**Consequences:** durationは長くなりますが、waveごとにissueを隔離し、Go/No-Goとrollbackを判断できます。この方式・順序は本人レビュー前・未承認で、実施済みdecisionではありません。
+**Consequences:** durationは長くなりますが、waveごとにissueを隔離し、Go/No-Goとrollbackを判断できます。この方式・順序はDraft・未レビュー・未承認で、実施済みdecisionではありません。
 
 **Validation needed:** [PoC acceptance criteria](11-virtualization-mtv-design.md#8-poc-受入基準)、[Migration plan](18-migration-plan.md)、採用版compatibilityとsource baseline。
 
@@ -132,7 +132,7 @@
 
 ## 12. ADR-008: Kong deferral
 
-**Context:** Kong は面談要件の関連製品ですが product requirement と contract がありません。
+**Context:** Kongは連携候補ですが、確定したproduct requirementとcontractがありません。
 
 **Decision:** integration point だけ設計し、KIC / Kong Operator、DB-less / hybrid / Konnect、plugin、version、license の選定を延期します。
 
@@ -160,9 +160,9 @@
 
 **Context:** [SCENARIO](../SCENARIO.md)の`BR-010`で、実施していない確認を成功扱いせず、未実施と要確認を明示することが固定されています。
 
-**Decision:** test / review / exercise は `Not Run`、`Blocked`、`Fail`、`Pass` を区別し、本人が確認・実施していない output を competence evidence にしません。
+**Decision:** test / review / validationは`Not Run`、`Blocked`、`Fail`、`Pass`を区別し、計画上のexpected resultをactual resultとして扱いません。
 
-**Consequences:** document completeness と personal understanding を分けて追跡できます。External submission 前に [Submission boundary](../evidence/submission-boundary.md) をレビューします。
+**Consequences:** document completeness、technical review、approval、execution evidenceを分けて追跡できます。公開前に[公開・機密除去基準](../evidence/publication-safety.md)をレビューします。
 
 ## 16. ADR template
 

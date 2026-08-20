@@ -1,7 +1,7 @@
 # 20. 運用引き継ぎ書
 
 > [!IMPORTANT]
-> 本書は架空の学習用運用設計です。クラスタ、VM、Kong、Sysdig は構築されておらず、runbook も未実施です。運用引き継ぎの受領、商用運用経験、SLA 達成を示しません。
+> 本書は一般公開用の架空プロジェクトにおける運用引き継ぎサンプルです。クラスタ、VM、Kong、Sysdigは構築されておらず、runbookも未実施です。運用受け入れとSLA達成はいずれも未判定です。
 
 ## 1. 文書情報
 
@@ -11,7 +11,7 @@
 | 対象案件 | Example Enterprise OpenShift 基盤導入 |
 | 版 | 0.1 Draft |
 | 基準日 | 2026-08-17 |
-| ステータス | 本人レビュー前・未承認 |
+| ステータス | Draft・未レビュー・未承認 |
 | Service owner | 未定 |
 | Operations acceptance | 未実施 |
 
@@ -114,7 +114,7 @@ oc get route,service,endpointslice -A
 | Monthly | patch/update advisory、operator channel、known issue、support lifecycle | Platform | update assessment |
 | Monthly | restore sample / schedule review candidate | Platform + App + Storage | restore test record |
 | Quarterly | RBAC/SCC/secret/certificate/access review | Security + Platform | access review approval |
-| Quarterly | capacity/failure-domain/RPO/RTO exercise | Service owner + all teams | resilience report |
+| Quarterly | capacity/failure-domain/RPO/RTO drill | Service owner + all teams | resilience report |
 
 Frequency は対象 workload、contract、cost、RPO/RTO に基づき承認します。
 
@@ -136,7 +136,7 @@ Frequency は対象 workload、contract、cost、RPO/RTO に基づき承認し�
 - application RPO 1 hour に対し、DB log / backup / OADP schedule の effective recovery point が 1 時間以内か測定する。
 - etcd backup は daily と high-risk change 前を候補にする。official support procedure と retention を確認する。
 - backup success alert だけでなく、object existence、age、encryption、retention、restore completion を監視する。
-- monthly candidate で isolated restore、quarterly candidate で cross-team recovery exercise を行う。
+- monthly candidate で isolated restore、quarterly candidate で cross-team recovery drill を行う。
 
 実際の schedule、retention、OADP/CSI version は未確定です。
 
@@ -255,7 +255,7 @@ Sysdig は未導入のため現運用対象外です。採用後は expected nod
 
 | Recipient | Minimum information | Exclude |
 | --- | --- | --- |
-| Red Hat Support | subscription/Cluster ID、OCP exact version、impact、timeline、must-gather | pull secret、unredacted customer data |
+| Red Hat Support | subscription/Cluster ID、OCP exact version、impact、timeline、must-gather | pull secret、未マスクの組織データ |
 | Hardware vendor | model/serial per approved channel、firmware、BMC event、node impact | platform token |
 | Storage vendor | CSI/backend version、volume ID per secure channel、latency/error/time | Kubernetes Secret、DB content |
 | Kong / Sysdig support | exact product/chart/agent version、topology、sanitized log、reproduction | access key、payload、private key |

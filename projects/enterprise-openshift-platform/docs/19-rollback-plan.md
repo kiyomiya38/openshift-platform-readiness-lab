@@ -1,7 +1,7 @@
 # 19. 切り戻し計画書
 
 > [!IMPORTANT]
-> 本書は架空案件の学習用計画です。切り戻し試験を含むすべての操作は **未実施** です。ここでいう rollback は MTV の変換を逆変換する機能ではなく、destination を停止・隔離して retained source を再び authoritative にする運用手順です。
+> 本書は一般公開用の架空プロジェクトにおけるロールバック計画サンプルです。切り戻し試験を含むすべての操作は **未実施** です。ここでいうrollbackはMTVの変換を逆変換する機能ではなく、destinationを停止・隔離してretained sourceを再びauthoritativeにする運用手順です。
 
 ## 1. 文書情報
 
@@ -11,7 +11,7 @@
 | 対象 | Wave 0 および VM PoC Wave 1〜3 |
 | 版 | 0.1 Draft |
 | 基準日 | 2026-08-17 |
-| ステータス | 本人レビュー前・未承認 |
+| ステータス | Draft・未レビュー・未承認 |
 | Decision owner | Change manager（氏名未定） |
 | 実施状態 | Rehearsal / rollback とも Not Run |
 

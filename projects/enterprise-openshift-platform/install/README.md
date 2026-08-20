@@ -2,7 +2,7 @@
 
 ## 状態と安全上の注意
 
-このディレクトリは `Example Enterprise OpenShift 基盤導入` の机上演習資材です。実機での生成・起動・導入は**未実施**です。`*.example` はそのまま投入する完成品ではありません。
+このディレクトリは`Example Enterprise OpenShift 基盤導入`の一般公開用構築資材サンプルです。実機での生成・起動・導入は**未実施**です。`*.example`はそのまま投入する完成品ではありません。
 
 - `install-config.yaml.example` の pull secret と SSH 公開鍵はダミーです。実値は秘密管理システムから、アクセス制御した一時作業ディレクトリへ注入します。
 - `agent-config.yaml.example` のIPアドレスとMACアドレスは文書用です。NIC名、MAC、root device、疎通性をBMC画面と現物で照合します。
@@ -26,4 +26,3 @@
 
 - [OpenShift 4.22: Agent-based Installerによるカスタマイズ導入](https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html/installing_an_on-premise_cluster_with_the_agent-based_installer/installing-with-agent-based-installer)
 - [OpenShift 4.22: MachineConfigによるchrony設定](https://docs.redhat.com/en/documentation/openshift_container_platform/4.22/html/machine_configuration/machine-configs-configure)
-

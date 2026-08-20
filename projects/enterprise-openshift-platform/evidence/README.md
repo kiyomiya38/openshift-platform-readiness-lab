@@ -1,80 +1,67 @@
-# 架空案件の証跡索引
+# プロジェクト証跡・レビュー記録索引
 
 > [!IMPORTANT]
-> このフォルダの初期状態は **本人レビュー前・実機未実施・試験未実施** です。文書や設定例が存在することは、本人の理解、構築成功、商用経験の証明ではありません。
+> このディレクトリは、架空プロジェクトの成果物レビュー、静的検証、実行ログ、試験証跡、公開時の機密除去基準を管理するためのサンプルです。初期状態はDraft・未レビュー・未承認で、実環境の構築、試験、移行、復旧はすべて`Not Run`です。
 
-## 1. Overall status
+## 1. プロジェクト状態
 
-| Category | State | Meaning |
+| 区分 | 状態 | 意味 |
 | --- | --- | --- |
-| AI-supported draft generation | Prepared | 架空条件から draft を作成した状態 |
-| Learner artifact review | Not Started | 本人による source 照合・訂正なし |
-| Learner official-source verification | Not Started | link 掲載と本人確認を区別 |
-| Desk / tabletop review | Not Run | procedure、test、migration、rollback 未演習 |
-| Static validation by learner | Not Run | Markdown/YAML/Ansible/Mermaid 未検証 |
-| OpenShift cluster build | Not Run | 検証環境なし |
-| Test / migration / rollback | Not Run | actual result なし |
-| Commercial experience | Not applicable | 架空案件であり商用経験ではない |
-| External submission readiness | Not Ready | 本人レビューと claim audit が必要 |
+| 成果物セット | Draft | 架空条件に基づくサンプルが存在する |
+| 技術レビュー | Not Reviewed | 指定された観点と役割によるレビュー記録がない |
+| 正式承認 | Not Approved | 意思決定者の承認記録がない |
+| 静的検証 | Partial Pass | link、Markdown構造、YAML、Kustomize render、試験ID、公開patternを検査。Mermaid、Ansible、全parameter整合はNot Run |
+| Tabletop review | Not Run | 構築・移行・ロールバックの机上確認を実施していない |
+| OpenShift構築 | Not Run | 承認済み検証環境がない |
+| 試験72件 | `NOT RUN` | actual resultと試験証跡がない |
+| VM移行・ロールバック | Not Run | VMware sourceとOpenShift destinationがない |
 
-## 2. Evidence files
+成果物の存在、期待結果、設定例、サンプル出力を`Reviewed`、`Approved`、`Pass`へ読み替えません。
 
-| File | Purpose | Initial state |
+## 2. 証跡ファイル
+
+| ファイル | 用途 | 初期状態 |
 | --- | --- | --- |
-| [Artifact review record](artifact-review-record.md) | 文書ごとの本人 review / correction | Not Started |
-| [Verification record](verification-record.md) | static、tabletop、lab の actual result | Not Run |
-| [Learning log](learning-log.md) | 本人が学んだ内容、source、疑問、次 action | Not Started |
-| [Submission boundary](submission-boundary.md) | 外部説明できる事実と禁止表現 | Review Required |
+| [成果物レビュー記録](artifact-review-record.md) | 文書・設定・図のレビュー状態、指摘、承認を管理する | Not Reviewed |
+| [設計レビュー実施記録](design-review-log.md) | review meeting、論点、判断、actionを時系列で残す | No Records |
+| [検証記録](verification-record.md) | link、YAML、Ansible、Mermaid、parameter等の静的検証を記録する | Partial Pass |
+| [実行ログ](execution-log.md) | 構築、変更、移行、復旧など実環境操作を記録する | Not Run |
+| [試験証跡索引](test-evidence-index.md) | 72試験の結果行と保管証跡を対応付ける | `NOT RUN` |
+| [公開・機密除去基準](publication-safety.md) | 一般公開時に保持できる値と除去対象を定める | Draft |
 
-## 3. Evidence level
+## 3. 状態定義
 
-| Level | Label | Minimum evidence |
-| --- | --- | --- |
-| E0 | Generated draft | artifact の存在。competence evidence ではない |
-| E1 | Learner reviewed | date、exact revision、primary source、correction |
-| E2 | Learner explained | 本人作成 summary / walkthrough record |
-| E3 | Static / tabletop verified | tool/version/command、actual output、limitation |
-| E4 | Lab verified | environment、approved change、actual Pass/Fail、sanitized evidence |
-| E5 | Repeated | 別 run で再現し差異を説明 |
-
-Project 全体の初期値は E0 です。E4/E5 でも商用経験とは別です。
-
-## 4. Result semantics
-
-| Result | Definition |
+| 状態 | 定義 |
 | --- | --- |
-| Not Run | 実行していない |
-| Blocked | 前提不成立で判定まで進めない |
-| Fail | 実行したが expected result を満たさない |
-| Pass | approved condition で actual result が expected result を満たす |
-| Needs Review | 内容または source の確認が必要 |
+| Draft | 作成中または正式レビュー前 |
+| Not Reviewed | 指定reviewerが内容と根拠を確認していない |
+| Reviewed | 日付、対象revision、観点、指摘、判断、未解決事項を記録済み |
+| Not Approved | 意思決定者による承認がない |
+| Approved | 承認者、日付、scope、条件を記録済み |
+| Not Run / `NOT RUN` | 操作・検証・試験を実行していない |
+| Blocked | 前提不成立により判定へ進めない |
+| Fail | 実行したがexpected resultを満たさない |
+| Pass | 承認済み条件で実行し、actual resultと証跡がexpected resultを満たす |
 
-`Blocked`、draft の期待結果、sample output を `Pass` にしません。
+## 4. 証跡登録原則
 
-## 5. Evidence registration rule
+1. 日時、timezone、実施役割、対象環境、変更IDを記録する。
+2. 成果物revision、製品版、tool版、実際のcommandまたはactionを記録する。
+3. expected resultとactual resultを分離する。
+4. failure、warning、deviation、未確認事項を省略しない。
+5. 証跡の場所、ファイル名、checksum、機密除去の有無を記録する。
+6. Secret、token、password、private key、kubeconfig、内部情報を保存しない。
+7. 証跡が存在しない場合は`Not Run`または`Unknown`を維持する。
 
-1. 実施者が本人であることを明示する。
-2. date/time、environment、artifact revision、tool/product version を記録する。
-3. planned command ではなく actual command / action と result を記録する。
-4. failure、warning、deviation、未確認を省略しない。
-5. token、Secret、private key、内部/customer information を redaction する。
-6. screenshot だけでなく machine-readable output または log を可能な範囲で残す。
-7. AI の説明や生成 artifact を本人実施の evidence として登録しない。
+## 5. 成果物の場所
 
-## 6. Artifact locations
+- 要求・設計・手順・試験・移行・運用: [`../docs/`](../docs/)
+- Installer入力と周辺設定: [`../install/`](../install/)
+- Ansible: [`../ansible/`](../ansible/)
+- OpenShift Manifest: [`../manifests/`](../manifests/)
+- 構成図: [`../diagrams/`](../diagrams/)
+- 共通条件: [SCENARIO](../SCENARIO.md)
 
-- Requirements / design / procedure / test / migration / operation: [`../docs/`](../docs/)
-- Installer examples: [`../install/`](../install/)
-- Ansible examples: [`../ansible/`](../ansible/)
-- OpenShift manifests: [`../manifests/`](../manifests/)
-- Architecture diagrams: [`../diagrams/`](../diagrams/)
-- Scenario boundary: [SCENARIO](../SCENARIO.md)
+## 6. 証跡の保管境界
 
-## 7. Current allowed statement
-
-現時点で説明できるのは、次の範囲です。
-
-> OpenShift 基盤導入の工程を学ぶため、完全に架空の要件から設計・構築手順・試験・移行・運用文書の draft を AI 支援で準備しています。本人レビュー、公式資料との照合、実機構築と試験はまだ実施していません。この成果物は商用経験を示すものではありません。
-
-External submission 前に [Submission boundary](submission-boundary.md) を本人と reviewer が確認します。
-
+この公開リポジトリには、機密除去済みの索引、サンプル様式、公開可能な検証結果だけを置きます。実環境のraw log、support bundle、screenshot、設定backup、credentialを含む証跡は、アクセス制御と保持期限を設定した組織内保管先で管理します。

@@ -8,17 +8,17 @@
 | 上位設計 | [05-basic-design.md](05-basic-design.md) |
 | 版／状態 | 0.1／Draft（机上設計） |
 | 基準日 | 2026-08-17 |
-| 作成 | 生成 AI 支援ドラフト（本人レビュー前） |
+| 作成 | 文書作成チーム（サンプル） |
 | レビュー／承認 | Platform/Hardware/Network／基盤責任者（未実施） |
 
 > [!IMPORTANT]
-> 架空の机上アーキテクチャです。ハードウェア互換性、性能、障害動作、インストールは未確認・未実施であり、商用経験の証明ではありません。
+> 一般公開用の架空プロジェクトにおける机上アーキテクチャです。状態はDraft・未レビュー・未承認で、ハードウェア互換性、性能、障害動作、インストールは未確認・未実施です。
 
 ## 1. アーキテクチャ判断
 
 | ID | 設計 | 根拠 | Owner | 状態 |
 | --- | --- | --- | --- | --- |
-| ARC-001 | 単一production想定クラスタ `ocp-prd`を構成 | 共通基盤の学習範囲を明確化 | Platform | Draft |
+| ARC-001 | 単一production想定クラスタ `ocp-prd`を構成 | 架空プロジェクトの設計範囲を明確化 | Platform | Draft |
 | ARC-002 | Agent-based Installer、`platform: none`でインストール | BD-002、外部インフラ管理 | Platform | Draft |
 | ARC-003 | Control Planeを3台で構成し業務Podを配置しない | etcd quorumと管理面分離 | Platform | Draft |
 | ARC-004 | Workerを3台で構成 | workload/Ingressの分散 | Platform | Draft |
@@ -156,4 +156,4 @@ install planのAutomatic/Manualは、セキュリティ修正速度と互換性�
 
 | 版 | 日付 | 内容 | 作成者 |
 | --- | --- | --- | --- |
-| 0.1 | 2026-08-17 | 初版 | 生成 AI 支援ドラフト |
+| 0.1 | 2026-08-17 | 初版 | 文書作成チーム（サンプル） |

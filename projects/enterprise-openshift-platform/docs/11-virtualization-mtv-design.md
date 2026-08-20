@@ -1,7 +1,7 @@
 # 11. OpenShift Virtualization・MTV 設計書
 
 > [!IMPORTANT]
-> 本書は完全に架空の学習用設計です。OpenShift Virtualization と Migration Toolkit for Virtualization（MTV）の導入、VM 移行、試験はすべて **未実施** です。商用経験や製品互換性を証明する文書ではありません。
+> 本書は一般公開用の架空プロジェクトにおける設計サンプルです。OpenShift Virtualization と Migration Toolkit for Virtualization（MTV）の導入、VM移行、試験はすべて **未実施** で、製品互換性も未確認です。
 
 ## 1. 文書情報
 
@@ -11,7 +11,7 @@
 | 対象案件 | Example Enterprise OpenShift 基盤導入 |
 | 版 | 0.1 Draft |
 | 基準日 | 2026-08-17 |
-| ステータス | 本人レビュー前・未承認 |
+| ステータス | Draft・未レビュー・未承認 |
 | 対象基盤 | OpenShift Container Platform 4.22.z（暫定） |
 | 実施状態 | 設計のみ。構築・移行・試験は未実施 |
 
@@ -296,7 +296,7 @@ oc get events -A --sort-by=.metadata.creationTimestamp
 
 | 観点 | 状態 | 備考 |
 | --- | --- | --- |
-| 本人による内容理解 | 未確認 | 学習ガイドに沿って確認する |
+| 成果物間の整合レビュー | 未実施 | [成果物利用ガイド](24-deliverable-usage-guide.md)の確認観点を使用する |
 | Platform review | 未実施 | 担当未定 |
 | Network / Storage review | 未実施 | 製品・方式未確定 |
 | Application acceptance review | 未実施 | 代表 VM owner は架空 |

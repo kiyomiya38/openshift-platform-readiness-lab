@@ -10,7 +10,7 @@
 | 文書 ID | PM-CHG-001 |
 | 版 | 0.1 Draft |
 | 基準日 | 2026-08-17 |
-| ステータス | 本人レビュー前・未承認 |
+| ステータス | Draft・未レビュー・未承認 |
 | Change manager | 未定 |
 | CAB / approval authority | 未定 |
 
@@ -49,7 +49,7 @@ Credential と Secret の値は change record に書きません。
 
 | ID | Title | Type | Scope | Related risk | Planned validation | Rollback reference | Owner | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| CHG-001 | Project document baseline 0.1 | Documentation | `projects/enterprise-openshift-platform/` | RSK-015, RSK-017 | link/schema/Mermaid/human review | previous Git revision | Learning owner | Draft |
+| CHG-001 | Project document baseline 0.1 | Documentation | `projects/enterprise-openshift-platform/` | RSK-015, RSK-017 | link/schema/Mermaid/technical review | previous Git revision | Documentation owner | Draft |
 | CHG-002 | External DNS/LB/NTP/Proxy preparation | Normal | cluster prerequisites | RSK-007, RSK-013 | DNS, port, health, HA tests | approved previous config | Network | Draft |
 | CHG-003 | Agent-based OCP 4.22.z cluster install | Major | 3 Control Plane + 3 Worker | RSK-001, RSK-002, RSK-007 | install + cluster health test | reinstall/recovery decision; destructive rollback separately approved | Platform | Draft |
 | CHG-004 | Post-install identity/storage/Registry/backup baseline | Major | IdP、RBAC、CSI、Internal Image Registry `Removed`→`Managed`、OADP candidate | RSK-003, RSK-008, RSK-009 | `TST-IAM-001〜004`、`TST-REG-001`、`TST-STG-001〜006`、`TST-BKP-001〜004`、`TST-RST-001〜004` | feature-specific prior state。Registryを`Removed`へ戻すことは本番成功扱いしない | Platform + Security + Storage | Draft |
@@ -124,7 +124,7 @@ Closure approval: NOT APPROVED
 
 - before/after、normal/error/recovery test が定量的である。
 - `Blocked` を Pass と扱わない。
-- Secret、token、private key、customer data を evidence から除外する。
+- Secret、token、private key、組織固有データをevidenceから除外する。
 
 ## 7. Emergency change
 

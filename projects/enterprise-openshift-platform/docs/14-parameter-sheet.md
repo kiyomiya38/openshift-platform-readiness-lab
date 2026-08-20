@@ -9,10 +9,11 @@
 | 版／状態 | 0.1／Draft |
 | 基準日 | 2026-08-17 |
 | 対応詳細設計 | [13-detailed-design.md](13-detailed-design.md) 0.1 |
+| レビュー／承認 | 未レビュー／未承認 |
 | 実機反映 | 未実施 |
 
 > [!IMPORTANT]
-> `架空値` は学習シナリオの入力、`TBD` は未決定、`未実施` は確認していないことを表します。Secret実値は意図的に記載していません。
+> `架空値`は公開サンプルの入力、`TBD`は未決定、`未実施`は確認していないことを表します。Secret実値は意図的に記載していません。
 
 ## 1. クラスタ・Installer
 
@@ -128,7 +129,7 @@ CPU virtualization extension、NUMA、disk性能、RAID/multipath、Secure Boot�
 | --- | --- | --- | --- |
 | WL-001 | Namespace | `example-web-dev` | Manifest作成済み、未適用 |
 | WL-002 | Deployment/replicas | `example-web`／2 | 未適用 |
-| WL-003 | image | `registry.access.redhat.com/ubi9/httpd-24:latest` | 学習用。digest固定前 |
+| WL-003 | image | `registry.access.redhat.com/ubi9/httpd-24:latest` | サンプル値。digest固定前 |
 | WL-004 | Service | ClusterIP、TCP/8080 | 未適用 |
 | WL-005 | Route | edge、redirect、`example-web-dev.apps...` | 未適用 |
 | WL-006 | RBAC group | `example-app-operators`／namespace read-only | IdP group連携前 |
